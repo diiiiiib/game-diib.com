@@ -601,7 +601,7 @@
 
                     // Redirect to home after 1 second
                     setTimeout(() => {
-                        window.location.href = 'b-index.html';
+                        window.location.href = 'index.html';
                     }, 1000);
                 } else {
                     showError(result.error);
@@ -618,7 +618,7 @@
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 // User is already logged in, redirect to home
-                window.location.href = 'b-index.html';
+                window.location.href = 'index.html';
             }
         });
     </script>

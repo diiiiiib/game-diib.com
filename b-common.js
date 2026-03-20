@@ -223,7 +223,7 @@ export function navigateToAnalytics() {
 
 // Navigate to index
 export function navigateToIndex() {
-    navigateTo('b-index.html');
+    navigateTo('index.html');
 }
 
 // Navigate to login
