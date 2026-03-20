@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Game DIIB - تفاصيل الأصل">
+    <meta name="theme-color" content="#682fcc">
+    <title>Game DIIB - تفاصيل الأصل</title>
+    <link rel="stylesheet" href="mobile-styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #682fcc;
+            --secondary-color: #44247b;
+            --accent-color: #22C55E;
+            --background-dark: #0F172A;
+            --background-light: #1E293B;
+            --text-primary: #F8FAFC;
+            --text-secondary: #94A3B8;
+            --border-color: #334155;
+            --success: #22C55E;
+            --warning: #FACC15;
+            --danger: #EF4444;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--background-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding-bottom: 70px;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 12px 16px;
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 200px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .header-btn {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.3rem;
+            padding: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .header-btn:hover {
+            color: var(--primary-color);
+            transform: scale(1.1);
+        }
+
+        /* Main Content */
+        .main-content {
+            padding-top: 60px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Asset Banner */
+        .asset-banner {
+            height: 250px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            position: relative;
+        }
+
+        .asset-banner img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
+        /* Asset Info */
+        .asset-info {
+            background: var(--background-light);
+            padding: 24px;
+            margin: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .asset-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--primary-color);
+        }
+
+        .asset-meta {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 16px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .asset-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .asset-description {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        /* Asset Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: var(--background-dark);
+            padding: 16px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* Price Card */
+        .price-card {
+            background: linear-gradient(135deg, var(--accent-color), #16a34a);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .price-label {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 8px;
+        }
+
+        .price-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 8px;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 14px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .action-btn.secondary {
+            background: var(--background-dark);
+            border: 2px solid var(--primary-color);
+        }
+
+        .action-btn.secondary:hover {
+            border-color: var(--secondary-color);
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--background-light);
+            border-top: 1px solid var(--border-color);
+            padding: 8px 16px;
+            display: flex;
+            justify-content: space-around;
+            z-index: 1000;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--text-secondary);
+            border: none;
+            background: none;
+            font-size: 0.85rem;
+        }
+
+        .nav-item.active {
+            color: var(--primary-color);
+        }
+
+        .nav-item:hover {
+            color: var(--primary-color);
+        }
+
+        .nav-icon {
+            font-size: 1.4rem;
+        }
+
+        /* Loading */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border-color);
+            border-top: 3px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-secondary);
+        }
+
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .empty-text {
+            font-size: 1.1rem;
+            margin-bottom: 16px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <h1 class="header-title" id="assetTitle">تفاصيل الأصل</h1>
+        <div class="header-actions">
+            <button class="header-btn" onclick="navigateToNotifications()">🔔</button>
+            <button class="header-btn" onclick="navigateToSearch()">🔍</button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+        <!-- Loading -->
+        <div class="loading">
+            <div class="spinner"></div>
+        </div>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <button class="nav-item" onclick="navigateToIndex()">
+            <span class="nav-icon">🏠</span>
+            <span>الرئيسية</span>
+        </button>
+        <button class="nav-item active" onclick="navigateToStore()">
+            <span class="nav-icon">🏪</span>
+            <span>المتجر</span>
+        </button>
+        <button class="nav-item" onclick="navigateToCompetitions()">
+            <span class="nav-icon">🏆</span>
+            <span>المسابقات</span>
+        </button>
+        <button class="nav-item" onclick="navigateToCommunity()">
+            <span class="nav-icon">👥</span>
+            <span>المجتمع</span>
+        </button>
+        <button class="nav-item" onclick="navigateToProfile()">
+            <span class="nav-icon">👤</span>
+            <span>الملف</span>
+        </button>
+    </nav>
+
+    <!-- Import Firebase Config -->
+    <script type="module" src="b-firebase-config.js"></script>
+
+    <!-- Import API Functions -->
+    <script type="module" src="b-api.js"></script>
+
+    <!-- Import Common Functions -->
+    <script type="module" src="b-common.js"></script>
+
+    <script type="module">
+        import { getAssetById, rateAsset, getAssetComments, addAssetComment } from './b-api.js';
+        import { showLoading, hideLoading, showError, showSuccess, formatNumber, getTimeAgo } from './b-common.js';
+
+        let currentAssetId = null;
+
+        // Load Asset Details
+        async function loadAssetDetails(assetId) {
+            showLoading();
+            try {
+                const asset = await getAssetById(assetId);
+
+                if (!asset) {
+                    showError('الأصل غير موجود');
+                    navigateToStore();
+                    return;
+                }
+
+                currentAssetId = assetId;
+                displayAssetDetails(asset);
+            } catch (error) {
+                console.error('Error loading asset details:', error);
+                showError('حدث خطأ في تحميل تفاصيل الأصل');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // Display Asset Details
+        function displayAssetDetails(asset) {
+            const mainContent = document.getElementById('mainContent');
+            document.getElementById('assetTitle').textContent = asset.title;
+
+            mainContent.innerHTML = `
+                <!-- Asset Banner -->
+                <div class="asset-banner">
+                    <img src="${asset.thumbnail || 'https://placehold.co/600x400'}" alt="${asset.title}">
+                    <button class="back-btn" onclick="navigateToStore()">✕</button>
+                </div>
+
+                <!-- Asset Info -->
+                <div class="asset-info">
+                    <h2 class="asset-title">${asset.title}</h2>
+
+                    <div class="asset-meta">
+                        <div class="asset-meta-item">
+                            <span>👤</span>
+                            <span>${asset.developerName || 'مطور'}</span>
+                        </div>
+                        <div class="asset-meta-item">
+                            <span>📥</span>
+                            <span>${asset.category || 'عام'}</span>
+                        </div>
+                        <div class="asset-meta-item">
+                            <span>📅</span>
+                            <span>${getTimeAgo(asset.createdAt)}</span>
+                        </div>
+                    </div>
+
+                    <p class="asset-description">${asset.description || 'لا يوجد وصف'}</p>
+
+                    <!-- Stats Grid -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-value">${formatNumber(asset.downloads || 0)}</div>
+                            <div class="stat-label">التحميلات</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">${formatNumber(asset.ratingsCount || 0)}</div>
+                            <div class="stat-label">التقييمات</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">${asset.averageRating ? asset.averageRating.toFixed(1) : '0.0'}</div>
+                            <div class="stat-label">التقييم</div>
+                        </div>
+                    </div>
+
+                    <!-- Price Card -->
+                    <div class="price-card">
+                        <div class="price-label">السعر</div>
+                        <div class="price-value">${asset.price ? asset.price + ' DIIB' : 'مجاناً'}</div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="action-buttons">
+                        <button class="action-btn" onclick="downloadAsset('${asset.id}')">تحميل</button>
+                        <button class="action-btn secondary" onclick="navigateToDeveloper('${asset.developerId}')">عرض المطور</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Download Asset
+        async function downloadAsset(assetId) {
+            try {
+                // In real implementation, this would download the asset
+                showSuccess('بدء التحميل...');
+
+                // Simulate download
+                setTimeout(() => {
+                    showSuccess('تم التحميل بنجاح!');
+                }, 2000);
+            } catch (error) {
+                console.error('Error downloading asset:', error);
+                showError('حدث خطأ في التحميل');
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            // Get asset ID from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const assetId = urlParams.get('id');
+
+            if (assetId) {
+                loadAssetDetails(assetId);
+            } else {
+                navigateToStore();
+            }
+        });
+    </script>
+</body>
+</html>

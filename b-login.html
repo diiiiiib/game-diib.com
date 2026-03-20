@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Game DIIB - تسجيل الدخول">
+    <meta name="theme-color" content="#682fcc">
+    <title>Game DIIB - تسجيل الدخول</title>
+    <link rel="stylesheet" href="mobile-styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #682fcc;
+            --secondary-color: #44247b;
+            --accent-color: #22C55E;
+            --background-dark: #0F172A;
+            --background-light: #1E293B;
+            --text-primary: #F8FAFC;
+            --text-secondary: #94A3B8;
+            --border-color: #334155;
+            --success: #22C55E;
+            --warning: #FACC15;
+            --danger: #EF4444;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--background-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        .logo-icon {
+            font-size: 1.8rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        /* Login Container */
+        .login-container {
+            width: 100%;
+            max-width: 400px;
+            background: var(--background-light);
+            border-radius: 16px;
+            padding: 32px 24px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .login-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 8px;
+            color: var(--primary-color);
+        }
+
+        .login-subtitle {
+            text-align: center;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+        }
+
+        /* Form */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            background: var(--background-dark);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .form-input::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .form-button {
+            width: 100%;
+            padding: 14px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 16px;
+        }
+
+        .form-button:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .form-button:active {
+            transform: translateY(0);
+        }
+
+        .form-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Social Login */
+        .social-login {
+            margin-top: 24px;
+            text-align: center;
+        }
+
+        .social-divider {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+            color: var(--text-secondary);
+        }
+
+        .social-divider::before,
+        .social-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border-color);
+        }
+
+        .social-divider span {
+            padding: 0 16px;
+            font-size: 0.9rem;
+        }
+
+        .social-btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--background-dark);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .social-btn:hover {
+            border-color: var(--primary-color);
+            background: rgba(104, 47, 204, 0.1);
+        }
+
+        /* Links */
+        .form-links {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 16px;
+            font-size: 0.9rem;
+        }
+
+        .form-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .form-link:hover {
+            color: var(--secondary-color);
+        }
+
+        /* Error Message */
+        .error-message {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            text-align: center;
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        /* Loading Spinner */
+        .loading {
+            display: none;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .loading.show {
+            display: flex;
+        }
+
+        .spinner {
+            width: 30px;
+            height: 30px;
+            border: 3px solid var(--border-color);
+            border-top: 3px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">
+            <span class="logo-icon">🎮</span>
+            <span>Game DIIB</span>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Login Container -->
+        <div class="login-container">
+            <h1 class="login-title">تسجيل الدخول</h1>
+            <p class="login-subtitle">مرحباً بعودتك! سجل دخولك للمتابعة</p>
+
+            <!-- Error Message -->
+            <div id="errorMessage" class="error-message"></div>
+
+            <!-- Login Form -->
+            <form id="loginForm">
+                <div class="form-group">
+                    <label class="form-label" for="email">البريد الإلكتروني</label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        class="form-input" 
+                        placeholder="example@email.com"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="password">كلمة المرور</label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        class="form-input" 
+                        placeholder="•••••••••"
+                        required
+                    >
+                </div>
+
+                <button type="submit" class="form-button" id="loginButton">
+                    تسجيل الدخول
+                </button>
+
+                <!-- Loading -->
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                </div>
+            </form>
+
+            <!-- Social Login -->
+            <div class="social-login">
+                <div class="social-divider">
+                    <span>أو</span>
+                </div>
+                <button type="button" class="social-btn" id="googleLogin">
+                    <span>🔵</span>
+                    <span>تسجيل الدخول بـ Google</span>
+                </button>
+            </div>
+
+            <!-- Links -->
+            <div class="form-links">
+                <a href="b-register.html" class="form-link">إنشاء حساب جديد</a>
+                <a href="#" class="form-link" id="forgotPassword">نسيت كلمة المرور؟</a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Import Firebase Config -->
+    <script type="module" src="b-firebase-config.js"></script>
+
+    <!-- Import Auth Functions -->
+    <script type="module" src="b-auth.js"></script>
+
+    <!-- Import Common Functions -->
+    <script type="module" src="b-common.js"></script>
+
+    <script type="module">
+        import { loginUser, loginWithGoogle, resetPassword } from './b-auth.js';
+        import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js';
+        import { auth } from './b-firebase-config.js';
+
+        // Form Elements
+        const loginForm = document.getElementById('loginForm');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const loginButton = document.getElementById('loginButton');
+        const googleLoginButton = document.getElementById('googleLogin');
+        const errorMessage = document.getElementById('errorMessage');
+        const loading = document.getElementById('loading');
+        const forgotPasswordLink = document.getElementById('forgotPassword');
+
+        // Show/Hide Loading
+        function showLoading(show) {
+            if (show) {
+                loading.classList.add('show');
+                loginButton.disabled = true;
+                googleLoginButton.disabled = true;
+            } else {
+                loading.classList.remove('show');
+                loginButton.disabled = false;
+                googleLoginButton.disabled = false;
+            }
+        }
+
+        // Show Error
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.classList.add('show');
+            setTimeout(() => {
+                errorMessage.classList.remove('show');
+            }, 5000);
+        }
+
+        // Login Form Handler
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const email = emailInput.value.trim();
+            const password = passwordInput.value;
+
+            if (!email || !password) {
+                showError('يرجى إدخال البريد الإلكتروني وكلمة المرور');
+                return;
+            }
+
+            showLoading(true);
+
+            try {
+                const result = await loginUser(email, password);
+                if (result.success) {
+                    window.location.href = 'b-index.html';
+                } else {
+                    showError(result.error || 'حدث خطأ في تسجيل الدخول');
+                }
+            } catch (error) {
+                showError('حدث خطأ غير متوقع');
+                console.error(error);
+            } finally {
+                showLoading(false);
+            }
+        });
+
+        // Google Login Handler
+        googleLoginButton.addEventListener('click', async () => {
+            showLoading(true);
+
+            try {
+                const result = await loginWithGoogle();
+                if (result.success) {
+                    window.location.href = 'b-index.html';
+                } else {
+                    showError(result.error || 'حدث خطأ في تسجيل الدخول');
+                }
+            } catch (error) {
+                showError('حدث خطأ غير متوقع');
+                console.error(error);
+            } finally {
+                showLoading(false);
+            }
+        });
+
+        // Forgot Password Handler
+        forgotPasswordLink.addEventListener('click', async (e) => {
+            e.preventDefault();
+
+            const email = emailInput.value.trim();
+            if (!email) {
+                showError('يرجى إدخال البريد الإلكتروني أولاً');
+                return;
+            }
+
+            showLoading(true);
+
+            try {
+                const result = await resetPassword(email);
+                if (result.success) {
+                    showError(result.message || 'تم إرسال رابط إعادة تعيين كلمة المرور');
+                } else {
+                    showError(result.error || 'حدث خطأ في إرسال رابط إعادة التعيين');
+                }
+            } catch (error) {
+                showError('حدث خطأ غير متوقع');
+                console.error(error);
+            } finally {
+                showLoading(false);
+            }
+        });
+
+        // Check Auth State
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                window.location.href = 'b-index.html';
+            }
+        });
+    </script>
+</body>
+</html>

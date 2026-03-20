@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Game DIIB - اللغة">
+    <meta name="theme-color" content="#682fcc">
+    <title>Game DIIB - اللغة</title>
+    <link rel="stylesheet" href="mobile-styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #682fcc;
+            --secondary-color: #44247b;
+            --accent-color: #22C55E;
+            --background-dark: #0F172A;
+            --background-light: #1E293B;
+            --text-primary: #F8FAFC;
+            --text-secondary: #94A3B8;
+            --border-color: #334155;
+            --success: #22C55E;
+            --warning: #FACC15;
+            --danger: #EF4444;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--background-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding-bottom: 70px;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 12px 16px;
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .header-btn {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.3rem;
+            padding: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .header-btn:hover {
+            color: var(--primary-color);
+            transform: scale(1.1);
+        }
+
+        /* Main Content */
+        .main-content {
+            padding-top: 60px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Language Card */
+        .language-card {
+            background: var(--background-light);
+            padding: 24px;
+            margin: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        .language-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .language-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--primary-color);
+        }
+
+        .language-description {
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+            line-height: 1.8;
+        }
+
+        /* Language List */
+        .language-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+            padding: 20px;
+        }
+
+        .language-item {
+            background: var(--background-light);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .language-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .language-item.active {
+            border: 2px solid var(--primary-color);
+            background: rgba(104, 47, 204, 0.1);
+        }
+
+        .language-flag {
+            font-size: 2.5rem;
+            margin-bottom: 12px;
+        }
+
+        .language-name {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .language-native {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--background-light);
+            border-top: 1px solid var(--border-color);
+            padding: 8px 16px;
+            display: flex;
+            justify-content: space-around;
+            z-index: 1000;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--text-secondary);
+            border: none;
+            background: none;
+            font-size: 0.85rem;
+        }
+
+        .nav-item.active {
+            color: var(--primary-color);
+        }
+
+        .nav-item:hover {
+            color: var(--primary-color);
+        }
+
+        .nav-icon {
+            font-size: 1.4rem;
+        }
+
+        /* Loading */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border-color);
+            border-top: 3px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <h1 class="header-title">اللغة</h1>
+        <div class="header-actions">
+            <button class="header-btn" onclick="navigateToSettings()">⚙️</button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Language Card -->
+        <div class="language-card">
+            <div class="language-icon">🌐</div>
+            <h2 class="language-title">اختر لغتك</h2>
+            <p class="language-description">اختر اللغة المفضلة لك لتجربة أفضل في المنصة</p>
+        </div>
+
+        <!-- Language List -->
+        <div class="language-list">
+            <div class="language-item active" data-lang="ar" onclick="selectLanguage('ar')">
+                <div class="language-flag">🇸🇦</div>
+                <div class="language-name">العربية</div>
+                <div class="language-native">Arabic</div>
+            </div>
+            <div class="language-item" data-lang="en" onclick="selectLanguage('en')">
+                <div class="language-flag">🇬🇧</div>
+                <div class="language-name">الإنجليزية</div>
+                <div class="language-native">English</div>
+            </div>
+            <div class="language-item" data-lang="fr" onclick="selectLanguage('fr')">
+                <div class="language-flag">🇫🇷</div>
+                <div class="language-name">الفرنسية</div>
+                <div class="language-native">Français</div>
+            </div>
+            <div class="language-item" data-lang="es" onclick="selectLanguage('es')">
+                <div class="language-flag">🇪🇸</div>
+                <div class="language-name">الإسبانية</div>
+                <div class="language-native">Español</div>
+            </div>
+            <div class="language-item" data-lang="de" onclick="selectLanguage('de')">
+                <div class="language-flag">🇩🇪</div>
+                <div class="language-name">الألمانية</div>
+                <div class="language-native">Deutsch</div>
+            </div>
+            <div class="language-item" data-lang="tr" onclick="selectLanguage('tr')">
+                <div class="language-flag">🇹🇷</div>
+                <div class="language-name">التركية</div>
+                <div class="language-native">Türkçe</div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <button class="nav-item" onclick="navigateToIndex()">
+            <span class="nav-icon">🏠</span>
+            <span>الرئيسية</span>
+        </button>
+        <button class="nav-item" onclick="navigateToStore()">
+            <span class="nav-icon">🏪</span>
+            <span>المتجر</span>
+        </button>
+        <button class="nav-item" onclick="navigateToCompetitions()">
+            <span class="nav-icon">🏆</span>
+            <span>المسابقات</span>
+        </button>
+        <button class="nav-item" onclick="navigateToCommunity()">
+            <span class="nav-icon">👥</span>
+            <span>المجتمع</span>
+        </button>
+        <button class="nav-item" onclick="navigateToProfile()">
+            <span class="nav-icon">👤</span>
+            <span>الملف</span>
+        </button>
+    </nav>
+
+    <!-- Import Common Functions -->
+    <script type="module" src="b-common.js"></script>
+
+    <script type="module">
+        import { showSuccess } from './b-common.js';
+
+        let currentLanguage = localStorage.getItem('language') || 'ar';
+
+        // Select Language
+        function selectLanguage(lang) {
+            // Update UI
+            document.querySelectorAll('.language-item').forEach(item => {
+                item.classList.remove('active');
+                if (item.dataset.lang === lang) {
+                    item.classList.add('active');
+                }
+            });
+
+            // Save language preference
+            localStorage.setItem('language', lang);
+            currentLanguage = lang;
+
+            // Show success message
+            showSuccess(`تم تغيير اللغة إلى ${getLanguageName(lang)}`);
+
+            // Reload page to apply language
+            setTimeout(() => {
+                window.location.reload();
+            }, 1000);
+        }
+
+        // Get Language Name
+        function getLanguageName(lang) {
+            const names = {
+                'ar': 'العربية',
+                'en': 'الإنجليزية',
+                'fr': 'الفرنسية',
+                'es': 'الإسبانية',
+                'de': 'الألمانية',
+                'tr': 'التركية'
+            };
+            return names[lang] || lang;
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            // Set active language
+            document.querySelectorAll('.language-item').forEach(item => {
+                if (item.dataset.lang === currentLanguage) {
+                    item.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

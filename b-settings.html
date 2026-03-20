@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Game DIIB - الإعدادات">
+    <meta name="theme-color" content="#682fcc">
+    <title>Game DIIB - الإعدادات</title>
+    <link rel="stylesheet" href="mobile-styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #682fcc;
+            --secondary-color: #44247b;
+            --accent-color: #22C55E;
+            --background-dark: #0F172A;
+            --background-light: #1E293B;
+            --text-primary: #F8FAFC;
+            --text-secondary: #94A3B8;
+            --border-color: #334155;
+            --success: #22C55E;
+            --warning: #FACC15;
+            --danger: #EF4444;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--background-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding-bottom: 70px;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 12px 16px;
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .header-btn {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.3rem;
+            padding: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .header-btn:hover {
+            color: var(--primary-color);
+            transform: scale(1.1);
+        }
+
+        /* Main Content */
+        .main-content {
+            padding-top: 60px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Section */
+        .section {
+            background: var(--background-light);
+            padding: 20px;
+            margin: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 24px;
+            background: var(--primary-color);
+            border-radius: 2px;
+        }
+
+        /* Form */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            background: var(--background-dark);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .form-input::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .form-textarea {
+            width: 100%;
+            padding: 14px 16px;
+            background: var(--background-dark);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 14px 16px;
+            background: var(--background-dark);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .form-select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .form-button {
+            width: 100%;
+            padding: 14px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 12px;
+        }
+
+        .form-button:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .form-button.danger {
+            background: var(--danger);
+        }
+
+        .form-button.danger:hover {
+            background: #dc2626;
+        }
+
+        /* Toggle */
+        .toggle-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .toggle-label {
+            font-weight: 500;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 26px;
+            background: var(--border-color);
+            border-radius: 13px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-switch.active {
+            background: var(--primary-color);
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            top: 3px;
+            right: 3px;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-switch.active::after {
+            right: 27px;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--background-light);
+            border-top: 1px solid var(--border-color);
+            padding: 8px 16px;
+            display: flex;
+            justify-content: space-around;
+            z-index: 1000;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--text-secondary);
+            border: none;
+            background: none;
+            font-size: 0.85rem;
+        }
+
+        .nav-item.active {
+            color: var(--primary-color);
+        }
+
+        .nav-item:hover {
+            color: var(--primary-color);
+        }
+
+        .nav-icon {
+            font-size: 1.4rem;
+        }
+
+        /* Loading */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border-color);
+            border-top: 3px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <h1 class="header-title">الإعدادات</h1>
+        <div class="header-actions">
+            <button class="header-btn" onclick="navigateToProfile()">👤</button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+        <!-- Loading -->
+        <div class="loading">
+            <div class="spinner"></div>
+        </div>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <button class="nav-item" onclick="navigateToIndex()">
+            <span class="nav-icon">🏠</span>
+            <span>الرئيسية</span>
+        </button>
+        <button class="nav-item" onclick="navigateToStore()">
+            <span class="nav-icon">🏪</span>
+            <span>المتجر</span>
+        </button>
+        <button class="nav-item" onclick="navigateToCompetitions()">
+            <span class="nav-icon">🏆</span>
+            <span>المسابقات</span>
+        </button>
+        <button class="nav-item" onclick="navigateToCommunity()">
+            <span class="nav-icon">👥</span>
+            <span>المجتمع</span>
+        </button>
+        <button class="nav-item" onclick="navigateToProfile()">
+            <span class="nav-icon">👤</span>
+            <span>الملف</span>
+        </button>
+    </nav>
+
+    <!-- Import Firebase Config -->
+    <script type="module" src="b-firebase-config.js"></script>
+
+    <!-- Import Auth Functions -->
+    <script type="module" src="b-auth.js"></script>
+
+    <!-- Import API Functions -->
+    <script type="module" src="b-api.js"></script>
+
+    <!-- Import Common Functions -->
+    <script type="module" src="b-common.js"></script>
+
+    <script type="module">
+        import { getUserById, updateUser } from './b-api.js';
+        import { showLoading, hideLoading, showError, showSuccess } from './b-common.js';
+        import { auth, onAuthStateChanged } from './b-auth.js';
+
+        let currentUserId = null;
+
+        // Load Settings
+        async function loadSettings() {
+            showLoading();
+            try {
+                const user = await new Promise((resolve) => {
+                    const unsubscribe = onAuthStateChanged(auth, (user) => {
+                        unsubscribe();
+                        resolve(user);
+                    });
+                });
+
+                if (!user) {
+                    navigateToLogin();
+                    return;
+                }
+
+                currentUserId = user.uid;
+                const userData = await getUserById(user.uid);
+
+                if (userData) {
+                    displaySettings(userData);
+                }
+            } catch (error) {
+                console.error('Error loading settings:', error);
+                showError('حدث خطأ في تحميل الإعدادات');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // Display Settings
+        function displaySettings(userData) {
+            const mainContent = document.getElementById('mainContent');
+
+            mainContent.innerHTML = `
+                <!-- Profile Section -->
+                <div class="section">
+                    <h2 class="section-title">الملف الشخصي</h2>
+
+                    <div class="form-group">
+                        <label class="form-label">الاسم الكامل</label>
+                        <input 
+                            type="text" 
+                            class="form-input" 
+                            id="nameInput"
+                            value="${userData.name || ''}"
+                            placeholder="أدخل اسمك الكامل"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">البريد الإلكتروني</label>
+                        <input 
+                            type="email" 
+                            class="form-input" 
+                            id="emailInput"
+                            value="${userData.email || ''}"
+                            disabled
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">رقم الهاتف</label>
+                        <input 
+                            type="tel" 
+                            class="form-input" 
+                            id="phoneInput"
+                            value="${userData.phone || ''}"
+                            placeholder="+966 XXXXXXXXXX"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">السيرة الذاتية</label>
+                        <textarea 
+                            class="form-textarea" 
+                            id="bioInput"
+                            placeholder="أخبرنا عن نفسك..."
+                        >${userData.bio || ''}</textarea>
+                    </div>
+
+                    <button class="form-button" onclick="saveProfile()">
+                        حفظ التغييرات
+                    </button>
+                </div>
+
+                <!-- Notifications Section -->
+                <div class="section">
+                    <h2 class="section-title">الإشعارات</h2>
+
+                    <div class="toggle-container">
+                        <span class="toggle-label">إشعارات البريد الإلكتروني</span>
+                        <div class="toggle-switch active" onclick="this.classList.toggle('active')"></div>
+                    </div>
+
+                    <div class="toggle-container">
+                        <span class="toggle-label">إشعارات التطبيق</span>
+                        <div class="toggle-switch active" onclick="this.classList.toggle('active')"></div>
+                    </div>
+
+                    <div class="toggle-container">
+                        <span class="toggle-label">إشعارات المسابقات</span>
+                        <div class="toggle-switch active" onclick="this.classList.toggle('active')"></div>
+                    </div>
+
+                    <div class="toggle-container">
+                        <span class="toggle-label">إشعارات التعليقات</span>
+                        <div class="toggle-switch active" onclick="this.classList.toggle('active')"></div>
+                    </div>
+                </div>
+
+                <!-- Privacy Section -->
+                <div class="section">
+                    <h2 class="section-title">الخصوصية</h2>
+
+                    <div class="toggle-container">
+                        <span class="toggle-label">الملف العام</span>
+                        <div class="toggle-switch active" onclick="this.classList.toggle('active')"></div>
+                    </div>
+
+                    <div class="toggle-container">
+                        <span class="toggle-label">إظهار النشاط</span>
+                        <div class="toggle-switch active" onclick="this.classList.toggle('active')"></div>
+                    </div>
+
+                    <div class="toggle-container">
+                        <span class="toggle-label">السماح بالمراسلة</span>
+                        <div class="toggle-switch active" onclick="this.classList.toggle('active')"></div>
+                    </div>
+                </div>
+
+                <!-- Security Section -->
+                <div class="section">
+                    <h2 class="section-title">الأمان</h2>
+
+                    <button class="form-button" onclick="navigateToSecurity()">
+                        تغيير كلمة المرور
+                    </button>
+
+                    <button class="form-button" onclick="enableTwoFactor()">
+                        تفعيل المصادقة الثنائية
+                    </button>
+
+                    <button class="form-button danger" onclick="confirmDeleteAccount()">
+                        حذف الحساب
+                    </button>
+                </div>
+            `;
+        }
+
+        // Save Profile
+        async function saveProfile() {
+            showLoading();
+            try {
+                const name = document.getElementById('nameInput').value.trim();
+                const phone = document.getElementById('phoneInput').value.trim();
+                const bio = document.getElementById('bioInput').value.trim();
+
+                if (!name) {
+                    showError('الاسم مطلوب');
+                    return;
+                }
+
+                const updateData = {
+                    name,
+                    phone,
+                    bio
+                };
+
+                const result = await updateUser(currentUserId, updateData);
+
+                if (result) {
+                    showSuccess('تم حفظ التغييرات بنجاح');
+                } else {
+                    showError('حدث خطأ في حفظ التغييرات');
+                }
+            } catch (error) {
+                console.error('Error saving profile:', error);
+                showError('حدث خطأ في حفظ التغييرات');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // Enable Two Factor
+        function enableTwoFactor() {
+            showSuccess('سيتم تفعيل المصادقة الثنائية قريباً');
+        }
+
+        // Confirm Delete Account
+        function confirmDeleteAccount() {
+            if (confirm('هل أنت متأكد من حذف حسابك؟ لا يمكن التراجع عن هذا الإجراء.')) {
+                showSuccess('تم إرسال رابط تأكيد الحذف إلى بريدك الإلكتروني');
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadSettings();
+        });
+
+        // Make functions globally available
+        window.saveProfile = saveProfile;
+        window.enableTwoFactor = enableTwoFactor;
+        window.confirmDeleteAccount = confirmDeleteAccount;
+    </script>
+</body>
+</html>

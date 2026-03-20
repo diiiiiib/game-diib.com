@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Game DIIB - لوحة التحكم">
+    <meta name="theme-color" content="#682fcc">
+    <title>Game DIIB - لوحة التحكم</title>
+    <link rel="stylesheet" href="mobile-styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #682fcc;
+            --secondary-color: #44247b;
+            --accent-color: #22C55E;
+            --background-dark: #0F172A;
+            --background-light: #1E293B;
+            --text-primary: #F8FAFC;
+            --text-secondary: #94A3B8;
+            --border-color: #334155;
+            --success: #22C55E;
+            --warning: #FACC15;
+            --danger: #EF4444;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--background-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding-bottom: 70px;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 12px 16px;
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .header-btn {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.3rem;
+            padding: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .header-btn:hover {
+            color: var(--primary-color);
+            transform: scale(1.1);
+        }
+
+        /* Main Content */
+        .main-content {
+            padding-top: 60px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* User Card */
+        .user-card {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            padding: 30px 20px;
+            margin: 20px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(104, 47, 204, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .user-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid white;
+        }
+
+        .user-info {
+            flex: 1;
+        }
+
+        .user-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: white;
+        }
+
+        .user-email {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            color: white;
+            margin-bottom: 8px;
+        }
+
+        .user-role {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: white;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 16px;
+            padding: 20px;
+        }
+
+        .stat-card {
+            background: var(--background-light);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .stat-icon {
+            font-size: 2rem;
+            margin-bottom: 12px;
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* DIIB Balance */
+        .balance-card {
+            background: var(--background-light);
+            padding: 24px;
+            margin: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .balance-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .balance-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        .balance-amount {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent-color);
+            margin-bottom: 16px;
+        }
+
+        .balance-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .balance-btn {
+            flex: 1;
+            padding: 12px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .balance-btn:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .balance-btn.secondary {
+            background: var(--background-dark);
+            border: 2px solid var(--primary-color);
+        }
+
+        /* Quick Actions */
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+            padding: 20px;
+        }
+
+        .action-card {
+            background: var(--background-light);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .action-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .action-icon {
+            font-size: 2rem;
+            margin-bottom: 12px;
+        }
+
+        .action-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        /* Recent Activity */
+        .activity-list {
+            padding: 20px;
+        }
+
+        .activity-item {
+            background: var(--background-light);
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--primary-color);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-text {
+            font-size: 0.95rem;
+            margin-bottom: 4px;
+        }
+
+        .activity-time {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--background-light);
+            border-top: 1px solid var(--border-color);
+            padding: 8px 16px;
+            display: flex;
+            justify-content: space-around;
+            z-index: 1000;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--text-secondary);
+            border: none;
+            background: none;
+            font-size: 0.85rem;
+        }
+
+        .nav-item.active {
+            color: var(--primary-color);
+        }
+
+        .nav-item:hover {
+            color: var(--primary-color);
+        }
+
+        .nav-icon {
+            font-size: 1.4rem;
+        }
+
+        /* Loading */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border-color);
+            border-top: 3px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-secondary);
+        }
+
+        .empty-icon {
+            font-size: 3rem;
+            margin-bottom: 16px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <h1 class="header-title">لوحة التحكم</h1>
+        <div class="header-actions">
+            <button class="header-btn" onclick="navigateToNotifications()">🔔</button>
+            <button class="header-btn" onclick="navigateToSettings()">⚙️</button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+        <!-- Loading -->
+        <div class="loading">
+            <div class="spinner"></div>
+        </div>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <button class="nav-item" onclick="navigateToIndex()">
+            <span class="nav-icon">🏠</span>
+            <span>الرئيسية</span>
+        </button>
+        <button class="nav-item" onclick="navigateToStore()">
+            <span class="nav-icon">🏪</span>
+            <span>المتجر</span>
+        </button>
+        <button class="nav-item" onclick="navigateToCompetitions()">
+            <span class="nav-icon">🏆</span>
+            <span>المسابقات</span>
+        </button>
+        <button class="nav-item" onclick="navigateToCommunity()">
+            <span class="nav-icon">🌐</span>
+            <span>المجتمع</span>
+        </button>
+        <button class="nav-item" onclick="navigateToDashboard()">
+            <span class="nav-icon">👤</span>
+            <span>حسابي</span>
+        </button>
+    </nav>
+
+    <!-- Import Firebase Config -->
+    <script type="module" src="b-firebase-config.js"></script>
+
+    <!-- Import Auth Functions -->
+    <script type="module" src="b-auth.js"></script>
+
+    <!-- Import API Functions -->
+    <script type="module" src="b-api.js"></script>
+
+    <!-- Import Common Functions -->
+    <script type="module" src="b-common.js"></script>
+
+    <script type="module">
+        import { getUserById, getUserActivity } from './b-api.js';
+        import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js';
+        import { auth } from './b-firebase-config.js';
+        import { getRoleText, formatNumber, formatCurrency, getTimeAgo } from './b-common.js';
+
+        let currentUserId = null;
+
+        // Load Account Data
+        async function loadAccountData(userId) {
+            try {
+                const mainContent = document.getElementById('mainContent');
+                const userData = await getUserById(userId);
+
+                if (!userData) {
+                    mainContent.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-icon">😕</div>
+                            <p>لم يتم العثور على بيانات المستخدم</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                // Update UI
+                mainContent.innerHTML = `
+                    <!-- User Card -->
+                    <div class="user-card">
+                        <img src="${userData.avatar || 'https://placehold.co/80x80'}" alt="Avatar" class="user-avatar">
+                        <div class="user-info">
+                            <h2 class="user-name">${userData.name || 'مستخدم'}</h2>
+                            <p class="user-email">${userData.email || ''}</p>
+                            <span class="user-role">${getRoleText(userData.role)}</span>
+                        </div>
+                    </div>
+
+                    <!-- Stats Grid -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">🎮</div>
+                            <div class="stat-value">${formatNumber(userData.gamesCount || 0)}</div>
+                            <div class="stat-label">الألعاب</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">🎨</div>
+                            <div class="stat-value">${formatNumber(userData.assetsCount || 0)}</div>
+                            <div class="stat-label">الأصول</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">🏆</div>
+                            <div class="stat-value">${formatNumber(userData.competitionsCount || 0)}</div>
+                            <div class="stat-label">المسابقات</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">⬇️</div>
+                            <div class="stat-value">${formatNumber(userData.downloads || 0)}</div>
+                            <div class="stat-label">التحميلات</div>
+                        </div>
+                    </div>
+
+                    <!-- DIIB Balance -->
+                    <div class="balance-card">
+                        <div class="balance-header">
+                            <h3 class="balance-title">رصيد DIIB</h3>
+                        </div>
+                        <div class="balance-amount">${formatCurrency(userData.diibBalance || 0)}</div>
+                        <div class="balance-actions">
+                            <button class="balance-btn" onclick="navigateToEarnings()">إيداع</button>
+                            <button class="balance-btn secondary" onclick="navigateToEarnings()">سحب</button>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="actions-grid">
+                        <div class="action-card" onclick="navigateToPublish()">
+                            <div class="action-icon">📤</div>
+                            <div class="action-title">نشر لعبة/أصل</div>
+                        </div>
+                        <div class="action-card" onclick="navigateToEarnings()">
+                            <div class="action-icon">💰</div>
+                            <div class="action-title">الأرباح</div>
+                        </div>
+                        <div class="action-card" onclick="navigateToAnalytics()">
+                            <div class="action-icon">📊</div>
+                            <div class="action-title">التحليلات</div>
+                        </div>
+                        <div class="action-card" onclick="navigateToSettings()">
+                            <div class="action-icon">⚙️</div>
+                            <div class="action-title">الإعدادات</div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activity -->
+                    <h3 style="padding: 20px 20px 0; font-size: 1.2rem; font-weight: 700;">النشاط الأخير</h3>
+                    <div class="activity-list" id="activityList">
+                        <!-- Activity items will be loaded here -->
+                    </div>
+                `;
+
+                // Load user activity
+                loadUserActivity(userId);
+            } catch (error) {
+                console.error('Error loading account data:', error);
+                document.getElementById('mainContent').innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">❌</div>
+                        <p>حدث خطأ في تحميل البيانات</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Load User Activity
+        async function loadUserActivity(userId) {
+            try {
+                const activityList = document.getElementById('activityList');
+                const activities = await getUserActivity(userId);
+
+                if (activities && activities.length > 0) {
+                    activityList.innerHTML = activities.map(activity => `
+                        <div class="activity-item">
+                            <div class="activity-icon">${getActivityIcon(activity.type)}</div>
+                            <div class="activity-content">
+                                <div class="activity-text">${activity.message || 'نشاط جديد'}</div>
+                                <div class="activity-time">${getTimeAgo(activity.timestamp)}</div>
+                            </div>
+                        </div>
+                    `).join('');
+                } else {
+                    activityList.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-icon">📭</div>
+                            <p>لا يوجد نشاط حالياً</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error loading activity:', error);
+            }
+        }
+
+        // Get Activity Icon
+        function getActivityIcon(type) {
+            const icons = {
+                'game': '🎮',
+                'asset': '🎨',
+                'competition': '🏆',
+                'download': '⬇️',
+                'rating': '⭐',
+                'comment': '💬',
+                'achievement': '🏅',
+                'earnings': '💰',
+                'default': '📌'
+            };
+            return icons[type] || icons['default'];
+        }
+
+        // Check Authentication
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                currentUserId = user.uid;
+                loadAccountData(user.uid);
+            } else {
+                window.location.href = 'b-login.html';
+            }
+        });
+    </script>
+</body>
+</html>

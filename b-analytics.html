@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Game DIIB - التحليلات">
+    <meta name="theme-color" content="#682fcc">
+    <title>Game DIIB - التحليلات</title>
+    <link rel="stylesheet" href="mobile-styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #682fcc;
+            --secondary-color: #44247b;
+            --accent-color: #22C55E;
+            --background-dark: #0F172A;
+            --background-light: #1E293B;
+            --text-primary: #F8FAFC;
+            --text-secondary: #94A3B8;
+            --border-color: #334155;
+            --success: #22C55E;
+            --warning: #FACC15;
+            --danger: #EF4444;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--background-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding-bottom: 70px;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 12px 16px;
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .header-btn {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.3rem;
+            padding: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .header-btn:hover {
+            color: var(--primary-color);
+            transform: scale(1.1);
+        }
+
+        /* Main Content */
+        .main-content {
+            padding-top: 60px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Time Filter */
+        .time-filter {
+            display: flex;
+            gap: 8px;
+            padding: 20px;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+
+        .time-filter::-webkit-scrollbar {
+            display: none;
+        }
+
+        .filter-btn {
+            padding: 10px 20px;
+            background: var(--background-light);
+            border: 2px solid var(--border-color);
+            border-radius: 20px;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            color: white;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 16px;
+            padding: 20px;
+        }
+
+        .stat-card {
+            background: var(--background-light);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        .stat-icon {
+            font-size: 2rem;
+            margin-bottom: 12px;
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .stat-change {
+            font-size: 0.85rem;
+            margin-top: 8px;
+        }
+
+        .stat-change.positive {
+            color: var(--success);
+        }
+
+        .stat-change.negative {
+            color: var(--danger);
+        }
+
+        /* Chart Container */
+        .chart-container {
+            background: var(--background-light);
+            padding: 20px;
+            margin: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .chart-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--primary-color);
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--background-light);
+            border-top: 1px solid var(--border-color);
+            padding: 8px 16px;
+            display: flex;
+            justify-content: space-around;
+            z-index: 1000;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--text-secondary);
+            border: none;
+            background: none;
+            font-size: 0.85rem;
+        }
+
+        .nav-item.active {
+            color: var(--primary-color);
+        }
+
+        .nav-item:hover {
+            color: var(--primary-color);
+        }
+
+        .nav-icon {
+            font-size: 1.4rem;
+        }
+
+        /* Loading */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border-color);
+            border-top: 3px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-secondary);
+        }
+
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .empty-text {
+            font-size: 1.1rem;
+            margin-bottom: 16px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <h1 class="header-title">التحليلات</h1>
+        <div class="header-actions">
+            <button class="header-btn" onclick="navigateToEarnings()">💰</button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+        <!-- Loading -->
+        <div class="loading">
+            <div class="spinner"></div>
+        </div>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="b-profile.html" class="nav-item">
+            <span class="nav-icon">🏠</span>
+            <span>الرئيسية</span>
+        </a>
+        <a href="b-analytics.html" class="nav-item">
+            <span class="nav-icon">📊</span>
+            <span>التحليلات</span>
+        </a>
+        <a href="b-publish.html" class="nav-item active">
+            <span class="nav-icon">🚀</span>
+            <span>النشر</span>
+        </a>
+        <a href="b-earnings.html" class="nav-item">
+            <span class="nav-icon">💰</span>
+            <span>أرباحي</span>
+        </a>
+        <a href="b-notifications.html" class="nav-item">
+            <span class="nav-icon">🔔</span>
+            <span>المستجدات</span>
+        </a>
+    </nav>
+
+
+    <!-- Import Firebase Config -->
+    <script type="module" src="b-firebase-config.js"></script>
+
+    <!-- Import API Functions -->
+    <script type="module" src="b-api.js"></script>
+
+    <!-- Import Common Functions -->
+    <script type="module" src="b-common.js"></script>
+
+    <script type="module">
+        import { getUserById, getUserGames, getUserAssets } from './b-api.js';
+        import { showLoading, hideLoading, formatNumber, formatCurrency, showError } from './b-common.js';
+        import { auth, onAuthStateChanged } from './b-auth.js';
+
+        let currentUserId = null;
+        let currentTimeFilter = 'week';
+        let userGames = [];
+        let userAssets = [];
+
+        // Load Analytics Data
+        async function loadAnalyticsData() {
+            showLoading();
+            try {
+                const user = await new Promise((resolve) => {
+                    const unsubscribe = onAuthStateChanged(auth, (user) => {
+                        unsubscribe();
+                        resolve(user);
+                    });
+                });
+
+                if (!user) {
+                    navigateToLogin();
+                    return;
+                }
+
+                currentUserId = user.uid;
+                const userData = await getUserById(user.uid);
+
+                if (userData) {
+                    // Get user games and assets
+                    userGames = await getUserGames(user.uid);
+                    userAssets = await getUserAssets(user.uid);
+                    displayAnalyticsData(userData);
+                }
+            } catch (error) {
+                console.error('Error loading analytics data:', error);
+                showError('حدث خطأ في تحميل بيانات التحليلات');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // Display Analytics Data
+        function displayAnalyticsData(userData) {
+            const mainContent = document.getElementById('mainContent');
+
+            mainContent.innerHTML = `
+                <!-- Time Filter -->
+                <div class="time-filter">
+                    <button class="filter-btn ${currentTimeFilter === 'day' ? 'active' : ''}" onclick="setTimeFilter('day')">يوم</button>
+                    <button class="filter-btn ${currentTimeFilter === 'week' ? 'active' : ''}" onclick="setTimeFilter('week')">أسبوع</button>
+                    <button class="filter-btn ${currentTimeFilter === 'month' ? 'active' : ''}" onclick="setTimeFilter('month')">شهر</button>
+                    <button class="filter-btn ${currentTimeFilter === 'year' ? 'active' : ''}" onclick="setTimeFilter('year')">سنة</button>
+                </div>
+
+                <!-- Stats Grid -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">👥</div>
+                        <div class="stat-value">${formatNumber(userData.downloads || 0)}</div>
+                        <div class="stat-label">التحميلات</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">💰</div>
+                        <div class="stat-value">${formatCurrency(userData.earnings || 0)}</div>
+                        <div class="stat-label">الأرباح</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🎮</div>
+                        <div class="stat-value">${formatNumber(userGames.length)}</div>
+                        <div class="stat-label">الألعاب</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🎨</div>
+                        <div class="stat-value">${formatNumber(userAssets.length)}</div>
+                        <div class="stat-label">الأصول</div>
+                    </div>
+                </div>
+
+                <!-- Chart Container -->
+                <div class="chart-container">
+                    <h2 class="chart-title">الأداء خلال ${getTimeFilterText()}</h2>
+                    <div class="empty-state">
+                        <div class="empty-icon">📊</div>
+                        <p class="empty-text">سيتم إضافة المخططات البيانية قريباً</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Set Time Filter
+        function setTimeFilter(filter) {
+            currentTimeFilter = filter;
+            loadAnalyticsData();
+        }
+
+        // Get Time Filter Text
+        function getTimeFilterText() {
+            const texts = {
+                'day': 'اليوم',
+                'week': 'الأسبوع',
+                'month': 'الشهر',
+                'year': 'السنة'
+            };
+            return texts[currentTimeFilter] || 'الأسبوع';
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', loadAnalyticsData);
+    </script>
+</body>
+</html>

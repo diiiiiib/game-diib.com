@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الأصدقاء - Game DIIB</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #682FCC;
+            --accent-color: #F59E0B;
+            --success-color: #22C55E;
+            --error-color: #EF4444;
+            --background-dark: #1A1A2E;
+            --background-light: #16213E;
+            --text-primary: #FFFFFF;
+            --text-secondary: #A0A0A0;
+            --border-color: #2A2A4A;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: var(--background-dark);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .header {
+            background: var(--primary-color);
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
+        .header-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .header-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* Search */
+        .search-container {
+            margin-bottom: 24px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 14px 20px;
+            background: var(--background-light);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(104, 47, 204, 0.1);
+        }
+
+        .search-input::placeholder {
+            color: var(--text-secondary);
+        }
+
+        /* Section Title */
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--text-primary);
+        }
+
+        /* Friends List */
+        .friends-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        /* Friend Card */
+        .friend-card {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px;
+            background: var(--background-light);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .friend-card:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .friend-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--border-color);
+        }
+
+        .friend-info {
+            flex: 1;
+        }
+
+        .friend-name {
+            font-weight: 700;
+            font-size: 1.05rem;
+            margin-bottom: 6px;
+            color: var(--text-primary);
+        }
+
+        .friend-role {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            padding: 4px 12px;
+            background: var(--background-dark);
+            border-radius: 12px;
+            display: inline-block;
+            margin-bottom: 8px;
+        }
+
+        .friend-status {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--success-color);
+            box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
+        }
+
+        .status-dot.offline {
+            background: var(--text-secondary);
+            box-shadow: none;
+        }
+
+        .status-dot.busy {
+            background: var(--error-color);
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+        }
+
+        .friend-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .friend-action-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--background-dark);
+            border: 2px solid var(--border-color);
+            color: var(--text-primary);
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .friend-action-btn:hover {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            transform: scale(1.1);
+        }
+
+        .friend-action-btn.chat:hover {
+            background: var(--accent-color);
+            border-color: var(--accent-color);
+        }
+
+        /* Loading */
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border-color);
+            border-top-color: var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Error Message */
+        .error-message {
+            background: var(--error-color);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin: 20px;
+            text-align: center;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Empty State */
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        .empty-text {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        /* Online Friends Section */
+        .online-friends {
+            margin-bottom: 24px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header {
+                padding: 12px 16px;
+            }
+
+            .header-title {
+                font-size: 1rem;
+            }
+
+            .main-content {
+                padding: 16px;
+            }
+
+            .friend-card {
+                padding: 12px;
+            }
+
+            .friend-avatar {
+                width: 48px;
+                height: 48px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-left">
+            <button class="back-btn" id="backBtn">
+                <i class="fas fa-arrow-right"></i>
+            </button>
+            <div class="header-title">الأصدقاء</div>
+        </div>
+        <div class="header-right">
+            <button class="header-btn" id="refreshBtn" title="تحديث">
+                <i class="fas fa-sync-alt"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Search -->
+        <div class="search-container">
+            <input type="text" class="search-input" id="searchInput" placeholder="ابحث عن أصدقاء...">
+        </div>
+
+        <!-- Loading -->
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+        </div>
+
+        <!-- Friends List -->
+        <div id="friendsList" style="display: none;">
+            <!-- Online Friends -->
+            <div class="online-friends" id="onlineFriends" style="display: none;">
+                <h3 class="section-title">المتصلون الآن</h3>
+                <div class="friends-list" id="onlineFriendsList"></div>
+            </div>
+
+            <!-- All Friends -->
+            <div class="all-friends">
+                <h3 class="section-title">جميع الأصدقاء</h3>
+                <div class="friends-list" id="allFriendsList"></div>
+            </div>
+        </div>
+
+        <!-- Empty State -->
+        <div class="empty-state" id="emptyState" style="display: none;">
+            <div class="empty-icon">👥</div>
+            <p class="empty-text">لا يوجد أصدقاء حالياً</p>
+        </div>
+    </main>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js';
+        import { 
+            getAuth, 
+            onAuthStateChanged 
+        } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js';
+        import { 
+            getFirestore, 
+            collection, 
+            getDocs,
+            doc,
+            getDoc
+        } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js';
+
+        // Import Firebase Configuration
+        import {
+            auth,
+            db
+        } from './b-firebase-config.js';
+
+        // DOM Elements
+        const backBtn = document.getElementById('backBtn');
+        const refreshBtn = document.getElementById('refreshBtn');
+        const searchInput = document.getElementById('searchInput');
+        const loading = document.getElementById('loading');
+        const friendsList = document.getElementById('friendsList');
+        const onlineFriends = document.getElementById('onlineFriends');
+        const onlineFriendsList = document.getElementById('onlineFriendsList');
+        const allFriendsList = document.getElementById('allFriendsList');
+        const emptyState = document.getElementById('emptyState');
+
+        // State
+        let currentUser = null;
+        let allUsers = [];
+
+        // Initialize
+        function init() {
+            onAuthStateChanged(auth, (user) => {
+                if (user) {
+                    currentUser = user;
+                    loadFriends();
+                } else {
+                    window.location.href = 'b-login.html';
+                }
+            });
+        }
+
+        // Load Friends
+        async function loadFriends() {
+            try {
+                loading.style.display = 'flex';
+                friendsList.style.display = 'none';
+                emptyState.style.display = 'none';
+
+                // Get all users
+                const usersSnapshot = await getDocs(collection(db, 'users'));
+                allUsers = usersSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+                // Filter out current user
+                const otherUsers = allUsers.filter(u => u.id !== currentUser.uid);
+
+                if (otherUsers.length === 0) {
+                    loading.style.display = 'none';
+                    emptyState.style.display = 'flex';
+                    return;
+                }
+
+                loading.style.display = 'none';
+                friendsList.style.display = 'block';
+
+                // Separate online and offline users
+                const onlineUsers = otherUsers.filter(u => u.status === 'online');
+                const offlineUsers = otherUsers.filter(u => u.status !== 'online');
+
+                // Display online users
+                if (onlineUsers.length > 0) {
+                    onlineFriends.style.display = 'block';
+                    onlineFriendsList.innerHTML = '';
+                    onlineUsers.forEach(user => {
+                        onlineFriendsList.appendChild(createFriendCard(user));
+                    });
+                } else {
+                    onlineFriends.style.display = 'none';
+                }
+
+                // Display all users
+                allFriendsList.innerHTML = '';
+                otherUsers.forEach(user => {
+                    allFriendsList.appendChild(createFriendCard(user));
+                });
+            } catch (error) {
+                console.error('Error loading friends:', error);
+                showError('حدث خطأ في تحميل الأصدقاء');
+            }
+        }
+
+        // Create Friend Card
+        function createFriendCard(user) {
+            const card = document.createElement('div');
+            card.className = 'friend-card';
+
+            const userName = user.name || user.displayName || 'مستخدم';
+            const userRole = user.role || 'player';
+            const userStatus = user.status || 'offline';
+            const userAvatar = user.avatar || user.photoURL || 'https://placehold.co/56x56?text=👤';
+
+            card.innerHTML = `
+                <img src="${userAvatar}" alt="${userName}" class="friend-avatar">
+                <div class="friend-info">
+                    <div class="friend-name">${userName}</div>
+                    <span class="friend-role">${getRoleText(userRole)}</span>
+                    <div class="friend-status">
+                        <span class="status-dot ${userStatus === 'offline' ? 'offline' : userStatus === 'busy' ? 'busy' : ''}"></span>
+                        <span>${userStatus === 'online' ? 'متصل' : userStatus === 'busy' ? 'مشغول' : 'غير متصل'}</span>
+                    </div>
+                </div>
+                <div class="friend-actions">
+                    <button class="friend-action-btn chat" data-user-id="${user.id}" title="دردشة">💬</button>
+                    <button class="friend-action-btn" data-user-id="${user.id}" title="الملف الشخصي">👤</button>
+                </div>
+            `;
+            return card;
+        }
+
+        // Get Role Text
+        function getRoleText(role) {
+            const roles = {
+                'admin': 'مدير',
+                'developer': 'مطور',
+                'designer': 'مصمم',
+                'player': 'لاعب'
+            };
+            return roles[role] || 'لاعب';
+        }
+
+        // Show Error
+        function showError(message) {
+            loading.style.display = 'none';
+            friendsList.style.display = 'none';
+
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error-message';
+            errorDiv.textContent = message;
+            document.querySelector('.main-content').insertBefore(errorDiv, document.querySelector('.main-content').firstChild);
+
+            setTimeout(() => {
+                errorDiv.remove();
+            }, 3000);
+        }
+
+        // Search Friends
+        function searchFriends(query) {
+            if (!query || query.trim() === '') {
+                loadFriends();
+                return;
+            }
+
+            const filteredUsers = allUsers.filter(user => {
+                const userName = user.name || user.displayName || '';
+                const userEmail = user.email || '';
+                return userName.toLowerCase().includes(query.toLowerCase()) ||
+                       userEmail.toLowerCase().includes(query.toLowerCase());
+            });
+
+            if (filteredUsers.length === 0) {
+                friendsList.style.display = 'none';
+                emptyState.style.display = 'flex';
+                emptyState.querySelector('.empty-text').textContent = 'لم يتم العثور على نتائج';
+                return;
+            }
+
+            emptyState.style.display = 'none';
+            friendsList.style.display = 'block';
+
+            // Separate online and offline users
+            const onlineUsers = filteredUsers.filter(u => u.status === 'online');
+            const offlineUsers = filteredUsers.filter(u => u.status !== 'online');
+
+            // Display online users
+            if (onlineUsers.length > 0) {
+                onlineFriends.style.display = 'block';
+                onlineFriendsList.innerHTML = '';
+                onlineUsers.forEach(user => {
+                    onlineFriendsList.appendChild(createFriendCard(user));
+                });
+            } else {
+                onlineFriends.style.display = 'none';
+            }
+
+            // Display all users
+            allFriendsList.innerHTML = '';
+            filteredUsers.forEach(user => {
+                allFriendsList.appendChild(createFriendCard(user));
+            });
+        }
+
+        // Event Listeners
+        backBtn.addEventListener('click', () => {
+            window.location.href = 'b-community.html';
+        });
+
+        refreshBtn.addEventListener('click', () => {
+            loadFriends();
+        });
+
+        searchInput.addEventListener('input', (e) => {
+            searchFriends(e.target.value);
+        });
+
+        // Friend Actions
+        document.querySelector('.main-content').addEventListener('click', (e) => {
+            const chatBtn = e.target.closest('.friend-action-btn.chat');
+            const profileBtn = e.target.closest('.friend-action-btn:not(.chat)');
+            const friendCard = e.target.closest('.friend-card');
+
+            if (chatBtn) {
+                e.stopPropagation();
+                const userId = chatBtn.dataset.userId;
+                window.location.href = `b-chat-room.html?userId=${userId}`;
+            } else if (profileBtn) {
+                e.stopPropagation();
+                const userId = profileBtn.dataset.userId;
+                window.location.href = `b-profile.html?userId=${userId}`;
+            } else if (friendCard) {
+                const userId = friendCard.querySelector('.friend-action-btn').dataset.userId;
+                window.location.href = `b-profile.html?userId=${userId}`;
+            }
+        });
+
+        // Initialize
+        init();
+    </script>
+</body>
+</html>

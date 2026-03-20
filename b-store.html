@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Game DIIB - المتجر">
+    <meta name="theme-color" content="#682fcc">
+    <title>Game DIIB - المتجر</title>
+    <link rel="stylesheet" href="mobile-styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #682fcc;
+            --secondary-color: #44247b;
+            --accent-color: #22C55E;
+            --background-dark: #0F172A;
+            --background-light: #1E293B;
+            --text-primary: #F8FAFC;
+            --text-secondary: #94A3B8;
+            --border-color: #334155;
+            --success: #22C55E;
+            --warning: #FACC15;
+            --danger: #EF4444;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--background-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding-bottom: 70px;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 12px 16px;
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .header-btn {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.3rem;
+            padding: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .header-btn:hover {
+            color: var(--primary-color);
+            transform: scale(1.1);
+        }
+
+        /* Search Bar */
+        .search-container {
+            padding: 80px 20px 20px;
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 14px 16px;
+            background: var(--background-light);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-bar:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        /* Categories */
+        .categories-scroll {
+            display: flex;
+            gap: 12px;
+            padding: 0 20px 20px;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+
+        .categories-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        .category-btn {
+            padding: 10px 20px;
+            background: var(--background-light);
+            border: 2px solid var(--border-color);
+            border-radius: 20px;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .category-btn:hover,
+        .category-btn.active {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            color: white;
+        }
+
+        /* Items Grid */
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 16px;
+            padding: 20px;
+        }
+
+        .item-card {
+            background: var(--background-light);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .item-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .item-image {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+
+        .item-info {
+            padding: 12px;
+        }
+
+        .item-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .item-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .item-rating {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .item-price {
+            font-size: 1rem;
+            color: var(--accent-color);
+            font-weight: 700;
+        }
+
+        .item-free {
+            color: var(--success);
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--background-light);
+            border-top: 1px solid var(--border-color);
+            padding: 8px 16px;
+            display: flex;
+            justify-content: space-around;
+            z-index: 1000;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--text-secondary);
+            border: none;
+            background: none;
+            font-size: 0.85rem;
+        }
+
+        .nav-item.active {
+            color: var(--primary-color);
+        }
+
+        .nav-item:hover {
+            color: var(--primary-color);
+        }
+
+        .nav-icon {
+            font-size: 1.4rem;
+        }
+
+        /* Loading */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border-color);
+            border-top: 3px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-secondary);
+        }
+
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .empty-text {
+            font-size: 1.1rem;
+            margin-bottom: 16px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <h1 class="header-title">المتجر</h1>
+        <div class="header-actions">
+            <button class="header-btn" onclick="navigateToSearch()">🔍</button>
+        </div>
+    </header>
+
+    <!-- Search Bar -->
+    <div class="search-container">
+        <input 
+            type="text" 
+            class="search-bar" 
+            id="searchBar"
+            placeholder="ابحث عن ألعاب وأصول..."
+        >
+    </div>
+
+    <!-- Categories -->
+    <div class="categories-scroll">
+        <button class="category-btn active" data-category="all">الكل</button>
+        <button class="category-btn" data-category="games">ألعاب</button>
+        <button class="category-btn" data-category="assets">أصول</button>
+        <button class="category-btn" data-category="3d">نماذج 3D</button>
+        <button class="category-btn" data-category="2d">نماذج 2D</button>
+        <button class="category-btn" data-category="audio">صوتيات</button>
+    </div>
+
+    <!-- Items Grid -->
+    <div class="items-grid" id="itemsGrid">
+        <!-- Items will be loaded dynamically -->
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <button class="nav-item" onclick="navigateToIndex()">
+            <span class="nav-icon">🏠</span>
+            <span>الرئيسية</span>
+        </button>
+        <button class="nav-item active" onclick="navigateToStore()">
+            <span class="nav-icon">🏪</span>
+            <span>المتجر</span>
+        </button>
+        <button class="nav-item" onclick="navigateToCompetitions()">
+            <span class="nav-icon">🏆</span>
+            <span>المسابقات</span>
+        </button>
+        <button class="nav-item" onclick="navigateToCommunity()">
+            <span class="nav-icon">🌐</span>
+            <span>المجتمع</span>
+        </button>
+        <button class="nav-item" onclick="navigateToDashboard()">
+            <span class="nav-icon">👤</span>
+            <span>حسابي</span>
+        </button>
+    </nav>
+
+    <!-- Import Firebase Config -->
+    <script type="module" src="b-firebase-config.js"></script>
+
+    <!-- Import API Functions -->
+    <script type="module" src="b-api.js"></script>
+
+    <!-- Import Common Functions -->
+    <script type="module" src="b-common.js"></script>
+
+    <script type="module">
+        import { getGames, getAssets, getGameById, getAssetById } from './b-api.js';
+        import { formatNumber, showLoading, hideLoading } from './b-common.js';
+
+        let currentCategory = 'all';
+        let allItems = [];
+
+        // Load Store Items
+        async function loadStoreItems() {
+            showLoading();
+            try {
+                // Load games and assets
+                const [games, assets] = await Promise.all([
+                    getGames(),
+                    getAssets()
+                ]);
+
+                // Combine all items
+                allItems = [
+                    ...games.map(game => ({ ...game, type: 'game' })),
+                    ...assets.map(asset => ({ ...asset, type: 'asset' }))
+                ];
+
+                // Filter and display items
+                filterAndDisplayItems();
+            } catch (error) {
+                console.error('Error loading store items:', error);
+                showError('حدث خطأ في تحميل العناصر');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // Filter and Display Items
+        function filterAndDisplayItems() {
+            const itemsGrid = document.getElementById('itemsGrid');
+            itemsGrid.innerHTML = '';
+
+            // Filter by category
+            let filteredItems = allItems;
+            if (currentCategory !== 'all') {
+                filteredItems = allItems.filter(item => {
+                    if (currentCategory === 'games') return item.type === 'game';
+                    if (currentCategory === 'assets') return item.type === 'asset';
+                    if (item.category) {
+                        return item.category.toLowerCase() === currentCategory;
+                    }
+                    return false;
+                });
+            }
+
+            // Filter by search
+            const searchTerm = document.getElementById('searchBar').value.toLowerCase();
+            if (searchTerm) {
+                filteredItems = filteredItems.filter(item =>
+                    item.title.toLowerCase().includes(searchTerm) ||
+                    (item.description && item.description.toLowerCase().includes(searchTerm))
+                );
+            }
+
+            // Display items
+            if (filteredItems.length === 0) {
+                itemsGrid.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">🔍</div>
+                        <p class="empty-text">لم يتم العثور على نتائج</p>
+                    </div>
+                `;
+                return;
+            }
+
+            filteredItems.forEach(item => {
+                const itemCard = document.createElement('div');
+                itemCard.className = 'item-card';
+                itemCard.onclick = () => {
+                    if (item.type === 'game') {
+                        window.location.href = `b-game-details.html?gameId=${item.id}`;
+                    } else {
+                        window.location.href = `b-asset-details.html?assetId=${item.id}`;
+                    }
+                };
+
+                const rating = item.averageRating || 0;
+                const ratingStars = '⭐'.repeat(Math.round(rating));
+
+                itemCard.innerHTML = `
+                    <img src="${item.thumbnail || item.image || 'https://placehold.co/300x200'}" 
+                         alt="${item.title}" 
+                         class="item-image">
+                    <div class="item-info">
+                        <h3 class="item-title">${item.title}</h3>
+                        <div class="item-meta">
+                            <div class="item-rating">
+                                <span>${ratingStars}</span>
+                                <span>(${item.ratingsCount || 0})</span>
+                            </div>
+                            <span>⬇️ ${formatNumber(item.downloads || 0)}</span>
+                        </div>
+                        <div class="item-price ${(item.price === 0 || item.price === null || item.price === undefined) ? 'item-free' : ''}">
+                            ${item.price === 0 || item.price === null || item.price === undefined ? 'مجاني' : formatCurrency(item.price)}
+                        </div>
+                    </div>
+                `;
+
+                itemsGrid.appendChild(itemCard);
+            });
+        }
+
+        // Category Buttons Event Listeners
+        document.querySelectorAll('.category-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Update active state
+                document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                // Update category
+                currentCategory = btn.dataset.category;
+                filterAndDisplayItems();
+            });
+        });
+
+        // Search Bar Event Listener
+        document.getElementById('searchBar').addEventListener('input', filterAndDisplayItems);
+
+        // Load items on page load
+        loadStoreItems();
+    </script>
+</body>
+</html>

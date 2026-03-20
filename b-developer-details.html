@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Game DIIB - تفاصيل المطور">
+    <meta name="theme-color" content="#682fcc">
+    <title>Game DIIB - تفاصيل المطور</title>
+    <link rel="stylesheet" href="mobile-styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #682fcc;
+            --secondary-color: #44247b;
+            --accent-color: #22C55E;
+            --background-dark: #0F172A;
+            --background-light: #1E293B;
+            --text-primary: #F8FAFC;
+            --text-secondary: #94A3B8;
+            --border-color: #334155;
+            --success: #22C55E;
+            --warning: #FACC15;
+            --danger: #EF4444;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--background-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding-bottom: 70px;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 12px 16px;
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 200px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .header-btn {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.3rem;
+            padding: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .header-btn:hover {
+            color: var(--primary-color);
+            transform: scale(1.1);
+        }
+
+        /* Main Content */
+        .main-content {
+            padding-top: 60px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Developer Header */
+        .developer-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            padding: 30px 20px;
+            margin: 20px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(104, 47, 204, 0.3);
+            text-align: center;
+        }
+
+        .developer-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid white;
+            margin-bottom: 16px;
+        }
+
+        .developer-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 8px;
+        }
+
+        .developer-role {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: white;
+            margin-bottom: 12px;
+        }
+
+        .developer-stats {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 16px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            opacity: 0.9;
+            color: white;
+        }
+
+        /* Bio Section */
+        .bio-section {
+            background: var(--background-light);
+            padding: 20px;
+            margin: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--primary-color);
+        }
+
+        .bio-text {
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+
+        /* Games Grid */
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 16px;
+            padding: 20px;
+        }
+
+        .game-card {
+            background: var(--background-dark);
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .game-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .game-image {
+            width: 100%;
+            height: 100px;
+            object-fit: cover;
+        }
+
+        .game-info {
+            padding: 12px;
+        }
+
+        .game-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .game-stats {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            padding: 20px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 14px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .action-btn.secondary {
+            background: var(--background-dark);
+            border: 2px solid var(--primary-color);
+        }
+
+        .action-btn.secondary:hover {
+            border-color: var(--secondary-color);
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--background-light);
+            border-top: 1px solid var(--border-color);
+            padding: 8px 16px;
+            display: flex;
+            justify-content: space-around;
+            z-index: 1000;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--text-secondary);
+            border: none;
+            background: none;
+            font-size: 0.85rem;
+        }
+
+        .nav-item.active {
+            color: var(--primary-color);
+        }
+
+        .nav-item:hover {
+            color: var(--primary-color);
+        }
+
+        .nav-icon {
+            font-size: 1.4rem;
+        }
+
+        /* Loading */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border-color);
+            border-top: 3px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <h1 class="header-title" id="developerName">تفاصيل المطور</h1>
+        <div class="header-actions">
+            <button class="header-btn" onclick="navigateToNotifications()">🔔</button>
+            <button class="header-btn" onclick="navigateToSearch()">🔍</button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+        <!-- Loading -->
+        <div class="loading">
+            <div class="spinner"></div>
+        </div>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <button class="nav-item" onclick="navigateToIndex()">
+            <span class="nav-icon">🏠</span>
+            <span>الرئيسية</span>
+        </button>
+        <button class="nav-item" onclick="navigateToStore()">
+            <span class="nav-icon">🏪</span>
+            <span>المتجر</span>
+        </button>
+        <button class="nav-item" onclick="navigateToCompetitions()">
+            <span class="nav-icon">🏆</span>
+            <span>المسابقات</span>
+        </button>
+        <button class="nav-item" onclick="navigateToCommunity()">
+            <span class="nav-icon">👥</span>
+            <span>المجتمع</span>
+        </button>
+        <button class="nav-item" onclick="navigateToProfile()">
+            <span class="nav-icon">👤</span>
+            <span>الملف</span>
+        </button>
+    </nav>
+
+    <!-- Import Firebase Config -->
+    <script type="module" src="b-firebase-config.js"></script>
+
+    <!-- Import API Functions -->
+    <script type="module" src="b-api.js"></script>
+
+    <!-- Import Common Functions -->
+    <script type="module" src="b-common.js"></script>
+
+    <script type="module">
+        import { getUserById, getUserGames } from './b-api.js';
+        import { showLoading, hideLoading, showError, getRoleText, formatNumber } from './b-common.js';
+
+        let currentDeveloperId = null;
+
+        // Load Developer Details
+        async function loadDeveloperDetails(developerId) {
+            showLoading();
+            try {
+                const developer = await getUserById(developerId);
+
+                if (!developer) {
+                    showError('المطور غير موجود');
+                    navigateToCommunity();
+                    return;
+                }
+
+                currentDeveloperId = developerId;
+                displayDeveloperDetails(developer);
+            } catch (error) {
+                console.error('Error loading developer details:', error);
+                showError('حدث خطأ في تحميل تفاصيل المطور');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // Display Developer Details
+        function displayDeveloperDetails(developer) {
+            const mainContent = document.getElementById('mainContent');
+            document.getElementById('developerName').textContent = developer.name;
+
+            mainContent.innerHTML = `
+                <!-- Developer Header -->
+                <div class="developer-header">
+                    <img src="${developer.avatar || 'https://placehold.co/100x100'}" alt="${developer.name}" class="developer-avatar">
+                    <h2 class="developer-name">${developer.name}</h2>
+                    <div class="developer-role">${getRoleText(developer.role)}</div>
+                    <div class="developer-stats">
+                        <div class="stat-item">
+                            <div class="stat-value">${formatNumber(developer.gamesCount || 0)}</div>
+                            <div class="stat-label">لعبة</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">${formatNumber(developer.assetsCount || 0)}</div>
+                            <div class="stat-label">أصل</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bio Section -->
+                <div class="bio-section">
+                    <h3 class="section-title">السيرة الذاتية</h3>
+                    <p class="bio-text">${developer.bio || 'لا توجد سيرة ذاتية'}</p>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="action-buttons">
+                    <button class="action-btn" onclick="navigateToStore()">تصفح الأعمال</button>
+                    <button class="action-btn secondary" onclick="navigateToCommunity()">تواصل مع المطور</button>
+                </div>
+            `;
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            // Get developer ID from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const developerId = urlParams.get('developerId');
+
+            if (developerId) {
+                loadDeveloperDetails(developerId);
+            } else {
+                showError('معرف المطور غير موجود');
+                navigateToCommunity();
+            }
+        });
+    </script>
+</body>
+</html>

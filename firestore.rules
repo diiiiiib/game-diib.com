@@ -1,0 +1,118 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // قواعد المستخدمين
+    match /users/{userId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null && request.auth.uid == userId;
+      allow update, delete: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // قواعد الألعاب
+    match /games/{gameId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null && request.resource.data.developerId == request.auth.uid;
+      allow update, delete: if request.auth != null && (request.resource.data.developerId == request.auth.uid || request.resource.data.role == 'admin');
+    }
+    
+    // قواعد المسابقات
+    match /competitions/{competitionId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null;
+    }
+    
+    // قواعد المشاركين في المسابقات
+    match /competition_participants/{participantId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
+      allow update: if request.auth != null && resource.data.userId == request.auth.uid;
+      allow delete: if request.auth != null && resource.data.userId == request.auth.uid;
+    }
+    
+    // قواعد التقييمات
+    match /ratings/{ratingId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
+      allow update, delete: if request.auth != null && resource.data.userId == request.auth.uid;
+    }
+    
+    // قواعد التعليقات
+    match /comments/{commentId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
+      allow update, delete: if request.auth != null && resource.data.userId == request.auth.uid;
+    }
+    
+    // قواعد الإشعارات
+    match /notifications/{notificationId} {
+      allow read: if request.auth != null && resource.data.userId == request.auth.uid;
+      allow write: if request.auth != null && resource.data.userId == request.auth.uid;
+    }
+    
+    // قواعد الأصول ثلاثية الأبعاد
+    match /models_3d/{modelId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null && request.resource.data.designerId == request.auth.uid;
+      allow update, delete: if request.auth != null && resource.data.designerId == request.auth.uid;
+    }
+    
+    // قواعد تعليقات الأصول
+    match /model_comments/{commentId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
+      allow update, delete: if request.auth != null && resource.data.userId == request.auth.uid;
+    }
+    
+    // قواعد تقييمات الأصول
+    match /model_ratings/{ratingId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
+      allow update, delete: if request.auth != null && resource.data.userId == request.auth.uid;
+    }
+
+    // قواعد منشورات المجتمع
+    match /community_posts/{postId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
+      allow update, delete: if request.auth != null && resource.data.userId == request.auth.uid;
+    }
+
+    // قواعد تعليقات المجتمع
+    match /community_comments/{commentId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
+      allow update, delete: if request.auth != null && resource.data.userId == request.auth.uid;
+    }
+
+    // قواعد إعجابات المجتمع
+    match /community_likes/{likeId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
+      allow delete: if request.auth != null && resource.data.userId == request.auth.uid;
+    }
+
+    // قواعد المعاملات
+    match /transactions/{transactionId} {
+      allow read: if request.auth != null && resource.data.userId == request.auth.uid;
+      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
+    }
+
+    // قواعد المحادثات
+    match /chats/{chatId} {
+      // السماح للمستخدمين المشاركين في المحادثة بقراءة وكتابة الرسائل
+      // chatId format: userId1_userId2
+      allow read, create: if request.auth != null;
+
+      // قواعد الرسائل داخل المحادثة
+      match /messages/{messageId} {
+        // السماح للمستخدمين المشاركين في المحادثة بقراءة الرسائل
+        allow read: if request.auth != null;
+
+        // السماح للمستخدمين بإرسال رسائل
+        allow create: if request.auth != null && 
+                       request.resource.data.senderId == request.auth.uid;
+      }
+    }
+  }
+}

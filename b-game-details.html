@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Game DIIB - تفاصيل اللعبة">
+    <meta name="theme-color" content="#682fcc">
+    <title>Game DIIB - تفاصيل اللعبة</title>
+    <link rel="stylesheet" href="mobile-styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            --primary-color: #682fcc;
+            --primary-gradient: linear-gradient(135deg, #682fcc 0%, #44247b 100%);
+            --secondary-color: #44247b;
+            --accent-color: #22C55E;
+            --background-dark: #0F172A;
+            --background-light: #1E293B;
+            --background-card: #1e293b;
+            --text-primary: #F8FAFC;
+            --text-secondary: #94A3B8;
+            --border-color: #334155;
+            --success: #22C55E;
+            --warning: #FACC15;
+            --danger: #EF4444;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--background-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding-bottom: 80px;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 12px 16px;
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 180px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .header-btn {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.3rem;
+            padding: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .header-btn:hover {
+            color: var(--primary-color);
+            transform: scale(1.1);
+        }
+
+        /* Main Content */
+        .main-content {
+            padding-top: 60px;
+            padding-left: 12px;
+            padding-right: 12px;
+            padding-bottom: 20px;
+        }
+
+        /* Game Banner */
+        .game-banner {
+            position: relative;
+            height: 200px;
+            background: var(--primary-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border-radius: 16px;
+            margin-bottom: 20px;
+        }
+
+        .game-banner img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: relative;
+            z-index: 1;
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
+        /* Game Info */
+        .game-info {
+            background: var(--background-card);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+            border: 1px solid var(--border-color);
+        }
+
+        .game-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+        }
+
+        .game-description {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 16px;
+        }
+
+        /* Game Meta */
+        .game-meta {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .meta-item {
+            background: rgba(104, 47, 204, 0.05);
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .meta-icon {
+            font-size: 1.2rem;
+        }
+
+        .meta-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .meta-value {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        /* Stats */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .stat-card {
+            background: var(--primary-gradient);
+            padding: 16px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Developer Card */
+        .developer-card {
+            background: var(--background-card);
+            border: 1px solid var(--border-color);
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .developer-card:hover {
+            border-color: var(--primary-color);
+            transform: translateX(-4px);
+        }
+
+        .developer-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--primary-color);
+        }
+
+        .developer-info {
+            flex: 1;
+        }
+
+        .developer-name {
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .developer-role {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* Competition Card */
+        .competition-card {
+            background: var(--background-card);
+            border: 1px solid var(--border-color);
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .competition-card:hover {
+            border-color: var(--accent-color);
+            transform: translateX(-4px);
+        }
+
+        .competition-icon {
+            font-size: 2rem;
+        }
+
+        .competition-info {
+            flex: 1;
+        }
+
+        .competition-name {
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .competition-status {
+            font-size: 0.85rem;
+            color: var(--accent-color);
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .action-btn {
+            padding: 14px 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Cairo', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .action-btn.primary {
+            background: var(--primary-gradient);
+            color: white;
+        }
+
+        .action-btn.secondary {
+            background: var(--background-card);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Rating Section */
+        .rating-section {
+            background: var(--background-card);
+            border: 1px solid var(--border-color);
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+        }
+
+        .stars {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin-bottom: 12px;
+        }
+
+        .star {
+            font-size: 2rem;
+            color: var(--border-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .star:hover,
+        .star.active {
+            color: #FFD700;
+        }
+
+        .rating-input {
+            width: 100%;
+            padding: 12px;
+            background: var(--background-dark);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-family: 'Cairo', sans-serif;
+            font-size: 0.95rem;
+            resize: vertical;
+            margin-bottom: 12px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        /* Comments Section */
+        .comments-section {
+            background: var(--background-card);
+            border: 1px solid var(--border-color);
+            padding: 16px;
+            border-radius: 12px;
+        }
+
+        .comment-card {
+            background: var(--background-dark);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 12px;
+        }
+
+        .comment-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .comment-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .comment-user {
+            flex: 1;
+        }
+
+        .comment-name {
+            font-weight: 700;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+        }
+
+        .comment-date {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .comment-rating {
+            color: #FFD700;
+            font-size: 0.9rem;
+        }
+
+        .comment-text {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Loading */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border-color);
+            border-top: 3px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <h1 class="header-title" id="gameTitle">تفاصيل اللعبة</h1>
+        <div class="header-actions">
+            <button class="header-btn" onclick="navigateToNotifications()">🔔</button>
+            <button class="header-btn" onclick="navigateToSearch()">🔍</button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+        <!-- Loading -->
+        <div class="loading">
+            <div class="spinner"></div>
+        </div>
+    </main>
+
+    <!-- Import Common Functions -->
+    <script type="module" src="b-common.js"></script>
+
+    <script type="module">
+        import { getGameById, rateGame, getGameComments, getUserById } from './b-api.js';
+        import { showLoading, hideLoading, showError, showSuccess, formatNumber, getTimeAgo, navigateToStore, getCurrentUser, sanitizeHTML } from './b-common.js';
+
+        let currentGameId = null;
+
+        // Load Game Details
+        async function loadGameDetails(gameId) {
+            showLoading();
+            try {
+                const game = await getGameById(gameId);
+
+                if (!game) {
+                    showError('اللعبة غير موجودة');
+                    navigateToStore();
+                    return;
+                }
+
+                currentGameId = gameId;
+
+                // Load developer data
+                if (game.developerId) {
+                    try {
+                        const developerData = await getUserById(game.developerId);
+                        if (developerData) {
+                            game.developerName = developerData.name || 'مطور';
+                            game.developerRole = developerData.role || 'مطور';
+                            game.developerAvatar = developerData.avatar || 'https://placehold.co/50x50';
+                        }
+                    } catch (error) {
+                        console.error('Error loading developer data:', error);
+                    }
+                }
+
+                displayGameDetails(game);
+            } catch (error) {
+                console.error('Error loading game details:', error);
+                showError('حدث خطأ في تحميل تفاصيل اللعبة');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // Display Game Details
+        function displayGameDetails(game) {
+            const mainContent = document.getElementById('mainContent');
+
+            mainContent.innerHTML = `
+                <!-- Game Banner -->
+                <div class="game-banner">
+                    <img src="${game.thumbnail || game.image || game.banner || game.background || 'https://placehold.co/600x400'}" 
+                         alt="${game.title}"
+                         onerror="this.src='https://placehold.co/600x400'">
+                    <button class="back-btn" onclick="navigateToStore()">✕</button>
+                </div>
+
+                <!-- Game Info -->
+                <div class="game-info">
+                    <h2 class="game-title">${game.title}</h2>
+                    <p class="game-description">${game.description || 'لا يوجد وصف'}</p>
+
+                    <!-- Game Meta -->
+                    <div class="game-meta">
+                        <div class="meta-item">
+                            <span class="meta-icon">👤</span>
+                            <div>
+                                <div class="meta-label">المطور</div>
+                                <div class="meta-value">${game.developerName || 'غير محدد'}</div>
+                            </div>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-icon">📦</span>
+                            <div>
+                                <div class="meta-label">الحجم</div>
+                                <div class="meta-value">${game.size || 'غير محدد'}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Stats -->
+                    <div class="stats">
+                        <div class="stat-card">
+                            <div class="stat-value">${formatNumber(game.downloads || 0)}</div>
+                            <div class="stat-label">التحميلات</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">${game.averageRating ? game.averageRating.toFixed(1) : '0.0'}</div>
+                            <div class="stat-label">التقييم</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">${game.ratingsCount || 0}</div>
+                            <div class="stat-label">التقييمات</div>
+                        </div>
+                    </div>
+
+                    <!-- Developer Card -->
+                    <div class="developer-card" onclick="window.navigateToDeveloper('${game.developerId}')">
+                        <img src="${game.developerAvatar || 'https://placehold.co/50x50'}" 
+                             alt="${game.developerName}" 
+                             class="developer-avatar"
+                             onerror="this.src='https://placehold.co/50x50'">
+                        <div class="developer-info">
+                            <div class="developer-name">${game.developerName || 'مطور'}</div>
+                            <div class="developer-role">${game.developerRole || 'مطور'}</div>
+                        </div>
+                    </div>
+
+                    <!-- Competition Card -->
+                    ${game.competitionId ? `
+                    <div class="competition-card" onclick="window.navigateToCompetition('${game.competitionId}')">
+                        <span class="competition-icon">🏆</span>
+                        <div class="competition-info">
+                            <div class="competition-name">مسابقة مرتبطة</div>
+                            <div class="competition-status">اضغط للتفاصيل</div>
+                        </div>
+                    </div>
+                    ` : ''}
+
+                    <!-- Action Buttons -->
+                    <div class="action-buttons">
+                        <button class="action-btn primary" onclick="window.downloadGame('${game.id}')">
+                            <span>⬇️</span>
+                            <span>تحميل اللعبة</span>
+                        </button>
+                        <button class="action-btn secondary" onclick="window.navigateToDeveloper('${game.developerId}')">
+                            <span>👤</span>
+                            <span>عرض المطور</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Rating Section -->
+                <div class="rating-section">
+                    <h3 class="section-title">قيم اللعبة</h3>
+                    <div class="stars" id="ratingStars">
+                        <span class="star" data-rating="1">★</span>
+                        <span class="star" data-rating="2">★</span>
+                        <span class="star" data-rating="3">★</span>
+                        <span class="star" data-rating="4">★</span>
+                        <span class="star" data-rating="5">★</span>
+                    </div>
+                    <textarea id="ratingComment" class="rating-input" placeholder="اكتب تعليقك عن اللعبة..." rows="3"></textarea>
+                    <button class="submit-btn" onclick="submitRating('${game.id}')">إرسال التقييم</button>
+                </div>
+
+                <!-- Comments Section -->
+                <div class="comments-section">
+                    <h3 class="section-title">التعليقات</h3>
+                    <div id="commentsList">
+                        <div class="loading">
+                            <div class="spinner"></div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Update header title
+            document.getElementById('gameTitle').textContent = game.title;
+
+            // Initialize rating stars
+            initializeRatingStars();
+
+            // Load comments
+            loadComments(game.id);
+        }
+
+        // Download Game
+        async function downloadGame(gameId) {
+            try {
+                showLoading();
+                const game = await getGameById(gameId);
+
+                if (!game || !game.downloadUrl) {
+                    showError('رابط التحميل غير متاح');
+                    hideLoading();
+                    return;
+                }
+
+                // Create download link
+                const link = document.createElement('a');
+                link.href = game.downloadUrl;
+                link.download = `${game.title}.zip`;
+                link.target = '_blank';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                showSuccess('تم بدء تحميل اللعبة!');
+            } catch (error) {
+                console.error('Error downloading game:', error);
+                showError('حدث خطأ في تحميل اللعبة');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // Navigate to Developer
+        function navigateToDeveloper(developerId) {
+            if (developerId) {
+                window.location.href = `b-developer-details.html?developerId=${developerId}`;
+            }
+        }
+
+        // Navigate to Competition
+        function navigateToCompetition(competitionId) {
+            if (competitionId) {
+                window.location.href = `b-competition-details.html?competitionId=${competitionId}`;
+            }
+        }
+
+        // Initialize Rating Stars
+        function initializeRatingStars() {
+            const stars = document.querySelectorAll('.star');
+            let selectedRating = 0;
+
+            stars.forEach(star => {
+                star.addEventListener('click', () => {
+                    selectedRating = parseInt(star.dataset.rating);
+                    updateStars(selectedRating);
+                });
+
+                star.addEventListener('mouseenter', () => {
+                    const rating = parseInt(star.dataset.rating);
+                    updateStars(rating);
+                });
+
+                star.addEventListener('mouseleave', () => {
+                    updateStars(selectedRating);
+                });
+            });
+
+            function updateStars(rating) {
+                stars.forEach(s => {
+                    const starRating = parseInt(s.dataset.rating);
+                    s.classList.toggle('active', starRating <= rating);
+                });
+            }
+        }
+
+        // Submit Rating
+        async function submitRating(gameId) {
+            const activeStars = document.querySelectorAll('.star.active');
+
+            if (activeStars.length === 0) {
+                showError('يرجى اختيار تقييم');
+                return;
+            }
+
+            const rating = activeStars.length;
+            const comment = document.getElementById('ratingComment').value.trim();
+
+            if (!comment) {
+                showError('يرجى كتابة تعليق');
+                return;
+            }
+
+            try {
+                const user = await getCurrentUser();
+                if (!user) {
+                    showError('يجب تسجيل الدخول للتقييم');
+                    return;
+                }
+
+                await rateGame(gameId, user.uid, rating, comment);
+                showSuccess('تم إرسال تقييمك بنجاح!');
+
+                // Reset form
+                document.getElementById('ratingComment').value = '';
+                document.querySelectorAll('.star').forEach(s => s.classList.remove('active'));
+
+                // Reload comments
+                loadComments(gameId);
+            } catch (error) {
+                console.error('Error submitting rating:', error);
+                showError('حدث خطأ في إرسال التقييم');
+            }
+        }
+
+        // Load Comments
+        async function loadComments(gameId) {
+            const commentsList = document.getElementById('commentsList');
+
+            try {
+                if (!commentsList) {
+                    console.error('Comments list element not found');
+                    return;
+                }
+
+                commentsList.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+
+                const comments = await getGameComments(gameId);
+
+                if (!comments || comments.length === 0) {
+                    commentsList.innerHTML = '<p style="text-align: center; color: var(--text-secondary); padding: 20px;">لا توجد تعليقات بعد</p>';
+                    return;
+                }
+
+                commentsList.innerHTML = '';
+
+                for (const comment of comments) {
+                    try {
+                        const userData = await getUserById(comment.userId);
+                        if (!userData) continue;
+
+                        const commentCard = document.createElement('div');
+                        commentCard.className = 'comment-card';
+
+                        const stars = '★'.repeat(comment.rating) + '☆'.repeat(5 - comment.rating);
+
+                        commentCard.innerHTML = `
+                            <div class="comment-header">
+                                <img src="${userData.avatar || 'https://placehold.co/40x40'}" 
+                                     alt="${userData.name}" 
+                                     class="comment-avatar"
+                                     onerror="this.src='https://placehold.co/40x40'">
+                                <div class="comment-user">
+                                    <div class="comment-name">${userData.name || 'مستخدم'}</div>
+                                    <div class="comment-date">${getTimeAgo(comment.timestamp)}</div>
+                                </div>
+                                <div class="comment-rating">${stars}</div>
+                            </div>
+                            <div class="comment-text">${comment.comment || ''}</div>
+                        `;
+
+                        commentsList.appendChild(commentCard);
+                    } catch (error) {
+                        console.error('Error loading comment:', error);
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading comments:', error);
+                if (commentsList) {
+                    commentsList.innerHTML = '<p style="text-align: center; color: var(--danger); padding: 20px;">حدث خطأ في تحميل التعليقات</p>';
+                }
+            }
+        }
+
+        // Make functions globally available
+        window.downloadGame = downloadGame;
+        window.navigateToDeveloper = navigateToDeveloper;
+        window.navigateToCompetition = navigateToCompetition;
+        window.submitRating = submitRating;
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            // Get game ID from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const gameId = urlParams.get('gameId');
+
+            if (gameId) {
+                loadGameDetails(gameId);
+            } else {
+                showError('لم يتم تحديد لعبة');
+                navigateToStore();
+            }
+        });
+    </script>
+</body>
+</html>

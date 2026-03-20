@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Game DIIB - التصنيفات">
+    <meta name="theme-color" content="#682fcc">
+    <title>Game DIIB - التصنيفات</title>
+    <link rel="stylesheet" href="mobile-styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #682fcc;
+            --secondary-color: #44247b;
+            --accent-color: #22C55E;
+            --background-dark: #0F172A;
+            --background-light: #1E293B;
+            --text-primary: #F8FAFC;
+            --text-secondary: #94A3B8;
+            --border-color: #334155;
+            --success: #22C55E;
+            --warning: #FACC15;
+            --danger: #EF4444;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--background-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding-bottom: 70px;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 12px 16px;
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .header-btn {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.3rem;
+            padding: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .header-btn:hover {
+            color: var(--primary-color);
+            transform: scale(1.1);
+        }
+
+        /* Main Content */
+        .main-content {
+            padding-top: 60px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 8px;
+            padding: 20px;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+
+        .tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            background: var(--background-light);
+            border: 2px solid var(--border-color);
+            border-radius: 20px;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .tab:hover,
+        .tab.active {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            color: white;
+        }
+
+        /* Ranking List */
+        .ranking-list {
+            padding: 20px;
+        }
+
+        .ranking-item {
+            background: var(--background-light);
+            padding: 16px;
+            margin-bottom: 12px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .ranking-item:hover {
+            transform: translateX(-4px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .rank-badge {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: white;
+        }
+
+        .rank-badge.gold {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+        }
+
+        .rank-badge.silver {
+            background: linear-gradient(135deg, #C0C0C0, #A0A0A0);
+        }
+
+        .rank-badge.bronze {
+            background: linear-gradient(135deg, #CD7F32, #8B4513);
+        }
+
+        .user-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .user-info {
+            flex: 1;
+        }
+
+        .user-name {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .user-role {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .user-stats {
+            text-align: left;
+        }
+
+        .stat-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--background-light);
+            border-top: 1px solid var(--border-color);
+            padding: 8px 16px;
+            display: flex;
+            justify-content: space-around;
+            z-index: 1000;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--text-secondary);
+            border: none;
+            background: none;
+            font-size: 0.85rem;
+        }
+
+        .nav-item.active {
+            color: var(--primary-color);
+        }
+
+        .nav-item:hover {
+            color: var(--primary-color);
+        }
+
+        .nav-icon {
+            font-size: 1.4rem;
+        }
+
+        /* Loading */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border-color);
+            border-top: 3px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-secondary);
+        }
+
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .empty-text {
+            font-size: 1.1rem;
+            margin-bottom: 16px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <h1 class="header-title">التصنيفات</h1>
+        <div class="header-actions">
+            <button class="header-btn" onclick="navigateToSearch()">🔍</button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab active" data-type="overall">الشامل</button>
+            <button class="tab" data-type="developers">المطورين</button>
+            <button class="tab" data-type="designers">المصممين</button>
+            <button class="tab" data-type="games">الألعاب</button>
+            <button class="tab" data-type="assets">الأصول</button>
+        </div>
+
+        <!-- Ranking List -->
+        <div class="ranking-list" id="rankingList">
+            <!-- Loading -->
+            <div class="loading">
+                <div class="spinner"></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <button class="nav-item" onclick="navigateToIndex()">
+            <span class="nav-icon">🏠</span>
+            <span>الرئيسية</span>
+        </button>
+        <button class="nav-item" onclick="navigateToStore()">
+            <span class="nav-icon">🏪</span>
+            <span>المتجر</span>
+        </button>
+        <button class="nav-item" onclick="navigateToCompetitions()">
+            <span class="nav-icon">🏆</span>
+            <span>المسابقات</span>
+        </button>
+        <button class="nav-item" onclick="navigateToCommunity()">
+            <span class="nav-icon">👥</span>
+            <span>المجتمع</span>
+        </button>
+        <button class="nav-item" onclick="navigateToProfile()">
+            <span class="nav-icon">👤</span>
+            <span>الملف</span>
+        </button>
+    </nav>
+
+    <!-- Import Firebase Config -->
+    <script type="module" src="b-firebase-config.js"></script>
+
+    <!-- Import API Functions -->
+    <script type="module" src="b-api.js"></script>
+
+    <!-- Import Common Functions -->
+    <script type="module" src="b-common.js"></script>
+
+    <script type="module">
+        import { getUserById } from './b-api.js';
+        import { showLoading, hideLoading, getRoleText, formatNumber } from './b-common.js';
+
+        let currentType = 'overall';
+
+        // Load Rankings
+        async function loadRankings() {
+            showLoading();
+            try {
+                const rankingList = document.getElementById('rankingList');
+
+                // Load rankings from database
+                const rankings = await getRankedUsers();
+                
+                // Get user data for each ranking
+                for (let i = 0; i < rankings.length; i++) {
+                    const userData = await getUserById(rankings[i].id);
+                    if (userData) {
+                        rankings[i].userName = userData.name;
+                        rankings[i].userRole = userData.role;
+                        rankings[i].userAvatar = userData.avatar;
+                    }
+                }
+                    {
+                        rank: 1,
+                        userId: 'user1',
+                        userName: 'أحمد محمد',
+                        userRole: 'developer',
+                        userAvatar: 'https://placehold.co/48x48',
+                        points: 12500,
+                        gamesCount: 15,
+                        assetsCount: 32
+                    },
+                    {
+                        rank: 2,
+                        userId: 'user2',
+                        userName: 'سارة علي',
+                        userRole: 'designer',
+                        userAvatar: 'https://placehold.co/48x48',
+                        points: 11200,
+                        gamesCount: 8,
+                        assetsCount: 45
+                    },
+                    {
+                        rank: 3,
+                        userId: 'user3',
+                        userName: 'محمد خالد',
+                        userRole: 'developer',
+                        userAvatar: 'https://placehold.co/48x48',
+                        points: 9800,
+                        gamesCount: 12,
+                        assetsCount: 28
+                    },
+                    {
+                        rank: 4,
+                        userId: 'user4',
+                        userName: 'فاطمة أحمد',
+                        userRole: 'player',
+                        userAvatar: 'https://placehold.co/48x48',
+                        points: 8500,
+                        gamesCount: 0,
+                        assetsCount: 0
+                    },
+                    {
+                        rank: 5,
+                        userId: 'user5',
+                        userName: 'عمر حسن',
+                        userRole: 'developer',
+                        userAvatar: 'https://placehold.co/48x48',
+                        points: 7200,
+                        gamesCount: 10,
+                        assetsCount: 22
+                    }
+                ];
+
+                displayRankings(rankings);
+            } catch (error) {
+                console.error('Error loading rankings:', error);
+                showError('حدث خطأ في تحميل التصنيفات');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // Display Rankings
+        function displayRankings(rankings) {
+            const rankingList = document.getElementById('rankingList');
+            rankingList.innerHTML = '';
+
+            rankings.forEach(user => {
+                const item = createRankingItem(user);
+                rankingList.appendChild(item);
+            });
+        }
+
+        // Create Ranking Item
+        function createRankingItem(user) {
+            const item = document.createElement('div');
+            item.className = 'ranking-item';
+            item.onclick = () => navigateToProfile(user.userId);
+
+            let rankClass = '';
+            if (user.rank === 1) rankClass = 'gold';
+            else if (user.rank === 2) rankClass = 'silver';
+            else if (user.rank === 3) rankClass = 'bronze';
+
+            item.innerHTML = `
+                <div class="rank-badge ${rankClass}">${user.rank}</div>
+                <img src="${user.userAvatar}" alt="${user.userName}" class="user-avatar">
+                <div class="user-info">
+                    <div class="user-name">${user.userName}</div>
+                    <div class="user-role">${getRoleText(user.userRole)}</div>
+                </div>
+                <div class="user-stats">
+                    <div class="stat-value">${formatNumber(user.points)}</div>
+                    <div class="stat-label">نقطة</div>
+                </div>
+            `;
+
+            return item;
+        }
+
+        // Tab Click Handler
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                currentType = tab.dataset.type;
+                loadRankings();
+            });
+        });
+
+        // Load rankings on page load
+        loadRankings();
+    </script>
+</body>
+</html>

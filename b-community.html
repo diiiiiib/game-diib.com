@@ -1,0 +1,1381 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Game DIIB - المجتمع">
+    <meta name="theme-color" content="#682fcc">
+    <title>Game DIIB - المجتمع</title>
+    <link rel="stylesheet" href="mobile-styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #682fcc;
+            --secondary-color: #44247b;
+            --accent-color: #22C55E;
+            --background-dark: #0F172A;
+            --background-light: #1E293B;
+            --text-primary: #F8FAFC;
+            --text-secondary: #94A3B8;
+            --border-color: #334155;
+            --success: #22C55E;
+            --warning: #FACC15;
+            --danger: #EF4444;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--background-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding-bottom: 70px;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 12px 16px;
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .header-btn {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.3rem;
+            padding: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .header-btn:hover {
+            color: var(--primary-color);
+            transform: scale(1.1);
+        }
+
+        /* Main Content */
+        .main-content {
+            padding-top: 60px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 8px;
+            padding: 20px;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+
+        .tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            background: var(--background-light);
+            border: 2px solid var(--border-color);
+            border-radius: 20px;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .tab:hover,
+        .tab.active {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            color: white;
+        }
+
+        /* Create Post Button */
+        .create-post-btn {
+            position: fixed;
+            bottom: 80px;
+            left: 20px;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            font-size: 1.8rem;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(104, 47, 204, 0.4);
+            transition: all 0.3s ease;
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .create-post-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 16px rgba(104, 47, 204, 0.6);
+        }
+
+        /* Post Card */
+        .post-card {
+            background: var(--background-light);
+            padding: 20px;
+            margin: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .post-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .post-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .post-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--primary-color);
+        }
+
+        .post-user {
+            flex: 1;
+        }
+
+        .post-user-name {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .post-user-role {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            padding: 2px 8px;
+            background: var(--background-dark);
+            border-radius: 12px;
+            display: inline-block;
+        }
+
+        .post-time {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .post-content {
+            margin-bottom: 16px;
+            line-height: 1.8;
+        }
+
+        .post-image {
+            width: 100%;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .post-image:hover {
+            transform: scale(1.02);
+        }
+
+        .post-actions {
+            display: flex;
+            gap: 16px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .post-action {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 8px 12px;
+            border-radius: 8px;
+        }
+
+        .post-action:hover {
+            color: var(--primary-color);
+            background: rgba(104, 47, 204, 0.1);
+        }
+
+        .post-action.liked {
+            color: var(--danger);
+        }
+
+        .post-action-count {
+            font-weight: 600;
+        }
+
+        /* Comments */
+        .comments-section {
+            padding: 16px;
+            background: var(--background-dark);
+            border-radius: 8px;
+            margin-top: 16px;
+        }
+
+        .comment {
+            display: flex;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .comment:last-child {
+            border-bottom: none;
+        }
+
+        .comment-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .comment-content {
+            flex: 1;
+        }
+
+        .comment-user {
+            font-weight: 600;
+            margin-bottom: 4px;
+            font-size: 0.9rem;
+        }
+
+        .comment-text {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--background-light);
+            border-top: 1px solid var(--border-color);
+            padding: 8px 16px;
+            display: flex;
+            justify-content: space-around;
+            z-index: 1000;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--text-secondary);
+            border: none;
+            background: none;
+            font-size: 0.85rem;
+        }
+
+        .nav-item.active {
+            color: var(--primary-color);
+        }
+
+        .nav-item:hover {
+            color: var(--primary-color);
+        }
+
+        .nav-icon {
+            font-size: 1.4rem;
+        }
+
+        /* Loading */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border-color);
+            border-top: 3px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-secondary);
+        }
+
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .empty-text {
+            font-size: 1.1rem;
+            margin-bottom: 16px;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--background-light);
+            border-radius: 16px;
+            padding: 24px;
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .modal-close:hover {
+            color: var(--danger);
+        }
+
+        /* Form */
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .form-input,
+        .form-textarea {
+            width: 100%;
+            padding: 12px;
+            background: var(--background-dark);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 0.95rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-input:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-button {
+            width: 100%;
+            padding: 12px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .form-button:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .form-button:disabled {
+            background: var(--text-secondary);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Error & Success Messages */
+        .message {
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            display: none;
+        }
+
+        .message.show {
+            display: block;
+        }
+
+        .message.error {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+            border: 1px solid var(--danger);
+        }
+
+        .message.success {
+            background: rgba(34, 197, 94, 0.1);
+            color: var(--success);
+            border: 1px solid var(--success);
+        }
+
+        /* Image Preview */
+        .image-preview {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .preview-item {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .preview-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .preview-item button {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            background: var(--danger);
+            color: white;
+            border: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+        }
+
+        /* Search Container */
+        .search-container {
+            padding: 20px;
+            background: var(--background-light);
+            margin: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 14px 20px;
+            background: var(--background-dark);
+            border: 2px solid var(--border-color);
+            border-radius: 24px;
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(104, 47, 204, 0.1);
+        }
+
+        .search-input::placeholder {
+            color: var(--text-secondary);
+        }
+
+        /* Friends List */
+        .friends-list {
+            padding: 20px;
+        }
+
+        .friend-card {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px;
+            background: var(--background-light);
+            border-radius: 12px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .friend-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(104, 47, 204, 0.3);
+        }
+
+        .friend-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--primary-color);
+            box-shadow: 0 2px 8px rgba(104, 47, 204, 0.3);
+        }
+
+        .friend-info {
+            flex: 1;
+        }
+
+        .friend-name {
+            font-weight: 700;
+            font-size: 1.05rem;
+            margin-bottom: 6px;
+            color: var(--text-primary);
+        }
+
+        .friend-role {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            padding: 4px 12px;
+            background: var(--background-dark);
+            border-radius: 12px;
+            display: inline-block;
+            margin-bottom: 8px;
+        }
+
+        .friend-status {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--success);
+            box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
+        }
+
+        .status-dot.offline {
+            background: var(--text-secondary);
+            box-shadow: none;
+        }
+
+        .status-dot.busy {
+            background: var(--danger);
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+        }
+
+        .friend-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .friend-action-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--background-dark);
+            border: 2px solid var(--border-color);
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .friend-action-btn:hover {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .friend-action-btn.chat:hover {
+            background: var(--accent-color);
+            border-color: var(--accent-color);
+        }
+
+        /* Chat Room */
+        .chat-room {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--background-dark);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-room-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px;
+            background: var(--primary-color);
+            color: white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .chat-room-header h2 {
+            margin: 0;
+            font-size: 1.2rem;
+        }
+
+        .chat-room-close {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .chat-room-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .chat-message {
+            max-width: 70%;
+            padding: 12px 16px;
+            border-radius: 12px;
+            position: relative;
+        }
+
+        .chat-message.sent {
+            align-self: flex-end;
+            background: var(--primary-color);
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .chat-message.received {
+            align-self: flex-start;
+            background: var(--background-light);
+            color: var(--text-primary);
+            border-bottom-left-radius: 4px;
+        }
+
+        .chat-message-time {
+            font-size: 0.75rem;
+            opacity: 0.7;
+            margin-top: 4px;
+        }
+
+        .chat-input-container {
+            display: flex;
+            gap: 12px;
+            padding: 20px;
+            background: var(--background-light);
+            box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 12px 20px;
+            background: var(--background-dark);
+            border: 2px solid var(--border-color);
+            border-radius: 24px;
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(104, 47, 204, 0.1);
+        }
+
+        .chat-send-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .chat-send-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(104, 47, 204, 0.4);
+        }
+
+        /* Online Friends */
+        .online-friends {
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-title::before {
+            content: "";
+            width: 4px;
+            height: 24px;
+            background: var(--primary-color);
+            border-radius: 2px;
+        }
+
+        /* No Results */
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-secondary);
+        }
+
+        .no-results-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .no-results-text {
+            font-size: 1.1rem;
+            margin-bottom: 16px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <h1 class="header-title">المجتمع</h1>
+        <div class="header-actions">
+            <button class="header-btn" id="searchBtn">🔍</button>
+            <button class="header-btn" id="notificationsBtn">🔔</button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab active" data-tab="posts">المنشورات</button>
+            <button class="tab" data-tab="friends">الأصدقاء</button>
+            <button class="tab" data-tab="discussions">النقاشات</button>
+            <button class="tab" data-tab="tutorials">الدروس</button>
+            <button class="tab" data-tab="showcase">الأعمال</button>
+            
+        </div>
+
+        <!-- Posts List -->
+        <div id="postsList">
+            <!-- Loading -->
+            <div class="loading">
+                <div class="spinner"></div>
+            </div>
+        </div>
+
+
+
+        <!-- Friends Section -->
+        <div id="friendsSection" style="display: none;">
+            <!-- Search Bar -->
+            <div class="search-container">
+                <input
+                    type="text"
+                    id="friendsSearch"
+                    class="search-input"
+                    placeholder="🔍 بحث عن أصدقاء..."
+                >
+            </div>
+
+            <!-- Friends List -->
+            <div id="friendsList">
+                <div class="loading">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Create Post Button -->
+    <button class="create-post-btn" id="createPostBtn">+</button>
+
+
+
+    <!-- Create Post Modal -->
+    <div class="modal" id="createPostModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">إنشاء منشور جديد</h2>
+                <button class="modal-close" id="closeCreatePostModal">✕</button>
+            </div>
+            <div class="message error" id="errorMessage"></div>
+            <div class="message success" id="successMessage"></div>
+            <form id="createPostForm">
+                <div class="form-group">
+                    <label class="form-label" for="postContent">محتوى المنشور</label>
+                    <textarea
+                        id="postContent"
+                        class="form-textarea"
+                        placeholder="شارك أفكارك مع المجتمع..."
+                        required
+                    ></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">إضافة صور</label>
+                    <input
+                        type="file"
+                        id="postImages"
+                        accept="image/*"
+                        multiple
+                        style="display: none;"
+                    >
+                    <button type="button" class="form-button" id="selectImagesBtn">
+                        📷 اختيار صور
+                    </button>
+                    <div class="image-preview" id="imagePreview"></div>
+                </div>
+                <button type="submit" class="form-button" id="submitPostBtn">نشر المنشور</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <button class="nav-item" id="navIndex">
+            <span class="nav-icon">🏠</span>
+            <span>الرئيسية</span>
+        </button>
+        <button class="nav-item" id="navStore">
+            <span class="nav-icon">🏪</span>
+            <span>المتجر</span>
+        </button>
+        <button class="nav-item" id="navCompetitions">
+            <span class="nav-icon">🏆</span>
+            <span>المسابقات</span>
+        </button>
+        <button class="nav-item active" id="navCommunity">
+            <span class="nav-icon">🌐</span>
+            <span>المجتمع</span>
+        </button>
+        <button class="nav-item" id="navDashboard">
+            <span class="nav-icon">👤</span>
+            <span>حسابي</span>
+        </button>
+    </nav>
+
+    <!-- Import Firebase Config -->
+    <script type="module" src="b-firebase-config.js"></script>
+
+    <!-- Import API Functions -->
+    <script type="module" src="b-api.js"></script>
+
+    <!-- Import Common Functions -->
+    <script type="module" src="b-common.js"></script>
+
+    <script type="module">
+        import { getUserById, getCommunityPosts, createCommunityPost, likeCommunityPost, getAllUsers } from './b-api.js';
+        import { showLoading, hideLoading, getTimeAgo, showError, showSuccess, getCurrentUser } from './b-common.js';
+
+        let currentTab = 'posts';
+        let allPosts = [];
+        let selectedImages = [];
+        let allUsers = [];
+        let filteredUsers = [];
+
+        // Load Community Posts
+        async function loadCommunityPosts() {
+            showLoading();
+            try {
+                const postsList = document.getElementById('postsList');
+
+                // Load posts from database
+                allPosts = await getCommunityPosts();
+
+                // Get user data for each post
+                for (let i = 0; i < allPosts.length; i++) {
+                    const post = allPosts[i];
+                    const userData = await getUserById(post.userId);
+                    if (userData) {
+                        post.userName = userData.name;
+                        post.userRole = userData.role;
+                        post.userAvatar = userData.avatar;
+                    }
+                }
+
+                displayPosts(allPosts);
+            } catch (error) {
+                console.error('Error loading community posts:', error);
+                showError('حدث خطأ في تحميل المنشورات');
+            } finally {
+                hideLoading();
+            }
+        }
+
+
+
+
+
+        // Search Friends
+        async function searchFriends(query) {
+            try {
+                const friendsList = document.getElementById('friendsList');
+                
+                if (!query || query.trim() === '') {
+                    loadFriends();
+                    return;
+                }
+
+                friendsList.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+
+                // Get all users and search
+                const users = await getAllUsers();
+                const user = await getCurrentUser();
+                
+                if (!users || users.length === 0) {
+                    friendsList.innerHTML = `
+                        <div class="no-results">
+                            <div class="no-results-icon">🔍</div>
+                            <p class="no-results-text">لم يتم العثور على نتائج</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                // Filter users by search query
+                const searchLower = query.toLowerCase();
+                const filteredUsers = users.filter(u => {
+                    if (u.id === user.uid) return false;
+                    return u.name && u.name.toLowerCase().includes(searchLower);
+                });
+
+                if (filteredUsers.length === 0) {
+                    friendsList.innerHTML = `
+                        <div class="no-results">
+                            <div class="no-results-icon">🔍</div>
+                            <p class="no-results-text">لم يتم العثور على نتائج</p>
+                            <p style="color: var(--text-secondary);">جرب البحث بكلمات مختلفة</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                // Display filtered users
+                friendsList.innerHTML = '<div class="friends-list"><h3 class="section-title">نتائج البحث</h3></div>';
+                const resultsSection = friendsList.querySelector('.friends-list');
+                
+                filteredUsers.forEach(user => {
+                    const card = createFriendCard(user);
+                    resultsSection.appendChild(card);
+                });
+            } catch (error) {
+                console.error('Error searching friends:', error);
+                showError('حدث خطأ في البحث');
+            }
+        }
+
+
+
+
+
+        // Display Posts
+        function displayPosts(posts) {
+            const postsList = document.getElementById('postsList');
+            postsList.innerHTML = '';
+
+            if (posts.length === 0) {
+                postsList.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">👥</div>
+                        <p class="empty-text">لا توجد منشورات حالياً</p>
+                        <p style="color: var(--text-secondary);">كن أول من يشارك مع المجتمع!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            posts.forEach(post => {
+                const card = createPostCard(post);
+                postsList.appendChild(card);
+            });
+        }
+
+        // Create Post Card
+        function createPostCard(post) {
+            const card = document.createElement('div');
+            card.className = 'post-card';
+            card.innerHTML = `
+                <div class="post-header">
+                    <img src="${post.userAvatar}" alt="${post.userName}" class="post-avatar">
+                    <div class="post-user">
+                        <div class="post-user-name">${post.userName}</div>
+                        <div class="post-user-role">${getRoleText(post.userRole)}</div>
+                    </div>
+                    <div class="post-time">${getTimeAgo(post.timestamp)}</div>
+                </div>
+                <div class="post-content">${post.content}</div>
+                ${post.image ? `<img src="${post.image}" alt="Post Image" class="post-image">` : ''}
+                <div class="post-actions">
+                    <div class="post-action like-btn" data-post-id="${post.id}">
+                        <span>❤️</span>
+                        <span class="post-action-count">${post.likes || 0}</span>
+                    </div>
+                    <div class="post-action comment-btn" data-post-id="${post.id}">
+                        <span>💬</span>
+                        <span class="post-action-count">${post.comments || 0}</span>
+                    </div>
+                    <div class="post-action share-btn" data-post-id="${post.id}">
+                        <span>🔗</span>
+                    </div>
+                </div>
+            `;
+            return card;
+        }
+
+        // Get Role Text
+        function getRoleText(role) {
+            const roleTexts = {
+                'player': 'لاعب',
+                'developer': 'مطور',
+                'designer': 'مصمم',
+                'admin': 'مدير'
+            };
+            return roleTexts[role] || role;
+        }
+
+        // Like Post
+        async function likePost(postId) {
+            try {
+                const user = await getCurrentUser();
+                if (!user) {
+                    showError('يرجى تسجيل الدخول أولاً');
+                    return;
+                }
+                await likeCommunityPost(postId, user.uid);
+                showSuccess('تم الإعجاب بالمنشور');
+                loadCommunityPosts();
+            } catch (error) {
+                console.error('Error liking post:', error);
+                showError('حدث خطأ في الإعجاب بالمنشور');
+            }
+        }
+
+        // Show Comments
+        function showComments(postId) {
+            // TODO: Implement comments section
+            showError('قسم التعليقات قيد التطوير');
+        }
+
+        // Share Post
+        function sharePost(postId) {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Game DIIB - مشاركة من المجتمع',
+                    text: 'شاهد هذا المنشور الرائع في مجتمع Game DIIB!',
+                    url: window.location.href
+                });
+            } else {
+                showError('المشاركة غير مدعومة في هذا المتصفح');
+            }
+        }
+
+        // Open Create Post Modal
+        function openCreatePostModal() {
+            document.getElementById('createPostModal').classList.add('show');
+        }
+
+        // Close Create Post Modal
+        function closeCreatePostModal() {
+            document.getElementById('createPostModal').classList.remove('show');
+            document.getElementById('createPostForm').reset();
+            document.getElementById('imagePreview').innerHTML = '';
+            selectedImages = [];
+        }
+
+        // Handle Image Selection
+        document.getElementById('postImages').addEventListener('change', function(e) {
+            const files = Array.from(e.target.files);
+            selectedImages = [...selectedImages, ...files];
+
+            const previewContainer = document.getElementById('imagePreview');
+            previewContainer.innerHTML = '';
+
+            selectedImages.forEach((file, index) => {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const previewItem = document.createElement('div');
+                    previewItem.className = 'preview-item';
+                    previewItem.innerHTML = `
+                        <img src="${event.target.result}" alt="Preview">
+                        <button type="button" class="remove-image-btn" data-index="${index}">✕</button>
+                    `;
+                    previewContainer.appendChild(previewItem);
+                };
+                reader.readAsDataURL(file);
+            });
+        });
+
+        // Remove Image
+        function removeImage(index) {
+            selectedImages.splice(index, 1);
+            const previewContainer = document.getElementById('imagePreview');
+            const items = previewContainer.querySelectorAll('.preview-item');
+            if (items[index]) {
+                items[index].remove();
+            }
+        }
+
+        // Create Post Form Handler
+        document.getElementById('createPostForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const content = document.getElementById('postContent').value.trim();
+            if (!content) {
+                showError('يرجى إدخال محتوى المنشور');
+                return;
+            }
+
+            try {
+                const user = await getCurrentUser();
+                if (!user) {
+                    showError('يرجى تسجيل الدخول أولاً');
+                    return;
+                }
+
+                const submitBtn = document.getElementById('submitPostBtn');
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'جاري النشر...';
+
+                // TODO: Handle image upload
+                const postData = {
+                    userId: user.uid,
+                    content: content,
+                    // image: uploadedImageUrl
+                };
+
+                await createCommunityPost(postData);
+                showSuccess('تم نشر المنشور بنجاح!');
+                closeCreatePostModal();
+                loadCommunityPosts();
+            } catch (error) {
+                console.error('Error creating post:', error);
+                showError('حدث خطأ في نشر المنشور');
+            } finally {
+                const submitBtn = document.getElementById('submitPostBtn');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'نشر المنشور';
+            }
+        });
+
+        // Tab Click Handler
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                currentTab = tab.dataset.tab;
+
+                // Show/hide sections based on tab
+                const postsList = document.getElementById('postsList');
+                const createPostBtn = document.getElementById('createPostBtn');
+
+                if (currentTab === 'friends') {
+                    // Navigate to friends page
+                    window.location.href = 'b-friends.html';
+                } else {
+                    postsList.style.display = 'block';
+                    createPostBtn.style.display = 'flex';
+                    loadCommunityPosts();
+                }
+            });
+        });
+
+        // Add event listeners
+        document.getElementById('createPostBtn').addEventListener('click', openCreatePostModal);
+        document.getElementById('closeCreatePostModal').addEventListener('click', closeCreatePostModal);
+        document.getElementById('selectImagesBtn').addEventListener('click', () => document.getElementById('postImages').click());
+        document.getElementById('searchBtn').addEventListener('click', () => window.location.href = 'b-search.html');
+        document.getElementById('notificationsBtn').addEventListener('click', () => window.location.href = 'b-notifications.html');
+        // Search friends input listener
+        document.getElementById('friendsSearch').addEventListener('input', (e) => {
+            const query = e.target.value;
+            searchFriends(query);
+        });
+
+        // Event delegation for friend actions
+        document.getElementById('friendsList').addEventListener('click', (e) => {
+            const chatBtn = e.target.closest('.friend-action-btn.chat');
+            const profileBtn = e.target.closest('.friend-action-btn:not(.chat)');
+            const friendCard = e.target.closest('.friend-card');
+
+            if (chatBtn) {
+                e.stopPropagation();
+                const userId = chatBtn.dataset.userId;
+                // Open chat with user
+                openChatRoom(userId);
+            } else if (profileBtn) {
+                e.stopPropagation();
+                const userId = profileBtn.dataset.userId;
+                // Navigate to profile page
+                window.location.href = `b-profile.html?userId=${userId}`;
+            } else if (friendCard) {
+                const userId = friendCard.querySelector('.friend-action-btn').dataset.userId;
+                // Navigate to profile page
+                window.location.href = `b-profile.html?userId=${userId}`;
+            }
+        });
+
+        // Event listener for removing images
+        document.getElementById('imagePreview').addEventListener('click', (e) => {
+            const removeBtn = e.target.closest('.remove-image-btn');
+            if (removeBtn) {
+                const index = parseInt(removeBtn.dataset.index);
+                removeImage(index);
+            }
+        });
+
+        // Navigation event listeners
+        document.getElementById('navIndex').addEventListener('click', () => window.location.href = 'b-index.html');
+        document.getElementById('navStore').addEventListener('click', () => window.location.href = 'b-store.html');
+        document.getElementById('navCompetitions').addEventListener('click', () => window.location.href = 'b-competitions.html');
+        document.getElementById('navDashboard').addEventListener('click', () => window.location.href = 'b-account.html');
+
+        // Event delegation for post actions
+        document.getElementById('postsList').addEventListener('click', async (e) => {
+            const likeBtn = e.target.closest('.like-btn');
+            const commentBtn = e.target.closest('.comment-btn');
+            const shareBtn = e.target.closest('.share-btn');
+
+            if (likeBtn) {
+                const postId = likeBtn.dataset.postId;
+                await likePost(postId);
+            } else if (commentBtn) {
+                const postId = commentBtn.dataset.postId;
+                showComments(postId);
+            } else if (shareBtn) {
+                const postId = shareBtn.dataset.postId;
+                sharePost(postId);
+            }
+        });
+
+        // Load posts on page load
+        loadCommunityPosts();
+    </script>
+
+
+</body>
+</html>

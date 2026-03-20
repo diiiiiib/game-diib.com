@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Game DIIB - تفاصيل المسابقة">
+    <meta name="theme-color" content="#682fcc">
+    <title>Game DIIB - تفاصيل المسابقة</title>
+    <link rel="stylesheet" href="mobile-styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #682fcc;
+            --secondary-color: #44247b;
+            --accent-color: #22C55E;
+            --background-dark: #0F172A;
+            --background-light: #1E293B;
+            --text-primary: #F8FAFC;
+            --text-secondary: #94A3B8;
+            --border-color: #334155;
+            --success: #22C55E;
+            --warning: #FACC15;
+            --danger: #EF4444;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--background-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding-bottom: 70px;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 12px 16px;
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 200px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .header-btn {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.3rem;
+            padding: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .header-btn:hover {
+            color: var(--primary-color);
+            transform: scale(1.1);
+        }
+
+        /* Main Content */
+        .main-content {
+            padding-top: 60px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Competition Banner */
+        .competition-banner {
+            height: 250px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            position: relative;
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
+        /* Competition Info */
+        .competition-info {
+            background: var(--background-light);
+            padding: 24px;
+            margin: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .competition-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--primary-color);
+        }
+
+        .competition-description {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        /* Competition Meta */
+        .competition-meta {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 16px;
+            margin-bottom: 20px;
+            padding: 16px;
+            background: var(--background-dark);
+            border-radius: 8px;
+        }
+
+        .meta-item {
+            text-align: center;
+        }
+
+        .meta-icon {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+        }
+
+        .meta-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 4px;
+        }
+
+        .meta-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* Prize Card */
+        .prize-card {
+            background: linear-gradient(135deg, var(--accent-color), #16a34a);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .prize-label {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 8px;
+        }
+
+        .prize-amount {
+            font-size: 2rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 8px;
+        }
+
+        /* Participants */
+        .participants-section {
+            background: var(--background-light);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--primary-color);
+        }
+
+        .participants-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+            gap: 12px;
+        }
+
+        .participant-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 14px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .action-btn.secondary {
+            background: var(--background-dark);
+            border: 2px solid var(--primary-color);
+        }
+
+        .action-btn.secondary:hover {
+            border-color: var(--secondary-color);
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--background-light);
+            border-top: 1px solid var(--border-color);
+            padding: 8px 16px;
+            display: flex;
+            justify-content: space-around;
+            z-index: 1000;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--text-secondary);
+            border: none;
+            background: none;
+            font-size: 0.85rem;
+        }
+
+        .nav-item.active {
+            color: var(--primary-color);
+        }
+
+        .nav-item:hover {
+            color: var(--primary-color);
+        }
+
+        .nav-icon {
+            font-size: 1.4rem;
+        }
+
+        /* Loading */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border-color);
+            border-top: 3px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-secondary);
+        }
+
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .empty-text {
+            font-size: 1.1rem;
+            margin-bottom: 16px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <h1 class="header-title" id="competitionTitle">تفاصيل المسابقة</h1>
+        <div class="header-actions">
+            <button class="header-btn" onclick="navigateToNotifications()">🔔</button>
+            <button class="header-btn" onclick="navigateToSearch()">🔍</button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+        <!-- Loading -->
+        <div class="loading">
+            <div class="spinner"></div>
+        </div>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <button class="nav-item" onclick="navigateToIndex()">
+            <span class="nav-icon">🏠</span>
+            <span>الرئيسية</span>
+        </button>
+        <button class="nav-item" onclick="navigateToStore()">
+            <span class="nav-icon">🏪</span>
+            <span>المتجر</span>
+        </button>
+        <button class="nav-item active" onclick="navigateToCompetitions()">
+            <span class="nav-icon">🏆</span>
+            <span>المسابقات</span>
+        </button>
+        <button class="nav-item" onclick="navigateToCommunity()">
+            <span class="nav-icon">👥</span>
+            <span>المجتمع</span>
+        </button>
+        <button class="nav-item" onclick="navigateToProfile()">
+            <span class="nav-icon">👤</span>
+            <span>الملف</span>
+        </button>
+    </nav>
+
+    <!-- Import Firebase Config -->
+    <script type="module" src="b-firebase-config.js"></script>
+
+    <!-- Import API Functions -->
+    <script type="module" src="b-api.js"></script>
+
+    <!-- Import Common Functions -->
+    <script type="module" src="b-common.js"></script>
+
+    <script type="module">
+        import { getCompetitionById, joinCompetition } from './b-api.js';
+        import { showLoading, hideLoading, showError, showSuccess, formatNumber, calculateDaysLeft } from './b-common.js';
+
+        let currentCompetitionId = null;
+
+        // Load Competition Details
+        async function loadCompetitionDetails(competitionId) {
+            showLoading();
+            try {
+                const competition = await getCompetitionById(competitionId);
+
+                if (!competition) {
+                    showError('المسابقة غير موجودة');
+                    navigateToCompetitions();
+                    return;
+                }
+
+                currentCompetitionId = competitionId;
+                displayCompetitionDetails(competition);
+            } catch (error) {
+                console.error('Error loading competition details:', error);
+                showError('حدث خطأ في تحميل تفاصيل المسابقة');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // Display Competition Details
+        function displayCompetitionDetails(competition) {
+            const mainContent = document.getElementById('mainContent');
+            document.getElementById('competitionTitle').textContent = competition.title;
+
+            mainContent.innerHTML = `
+                <!-- Competition Banner -->
+                <div class="competition-banner">
+                    <span>🏆</span>
+                    <button class="back-btn" onclick="navigateToCompetitions()">✕</button>
+                </div>
+
+                <!-- Competition Info -->
+                <div class="competition-info">
+                    <h2 class="competition-title">${competition.title}</h2>
+                    <p class="competition-description">${competition.description || 'لا يوجد وصف'}</p>
+
+                    <!-- Competition Meta -->
+                    <div class="competition-meta">
+                        <div class="meta-item">
+                            <div class="meta-icon">📅</div>
+                            <div class="meta-value">${calculateDaysLeft(competition.endDate)}</div>
+                            <div class="meta-label">أيام متبقية</div>
+                        </div>
+                        <div class="meta-item">
+                            <div class="meta-icon">👥</div>
+                            <div class="meta-value">${formatNumber(competition.participants?.length || 0)}</div>
+                            <div class="meta-label">مشاركين</div>
+                        </div>
+                        <div class="meta-item">
+                            <div class="meta-icon">🎯</div>
+                            <div class="meta-value">${competition.status || 'نشطة'}</div>
+                            <div class="meta-label">الحالة</div>
+                        </div>
+                    </div>
+
+                    <!-- Prize Card -->
+                    <div class="prize-card">
+                        <div class="prize-label">الجائزة</div>
+                        <div class="prize-amount">${formatNumber(competition.prize || 0)} DIIB</div>
+                    </div>
+                </div>
+
+                <!-- Participants Section -->
+                <div class="participants-section">
+                    <h3 class="section-title">المشاركين</h3>
+                    <div class="participants-list">
+                        ${competition.participants?.slice(0, 10).map(participant => `
+                            <img src="${participant.avatar || 'https://placehold.co/48x48'}" 
+                                 alt="${participant.name}" 
+                                 class="participant-avatar">
+                        `).join('') || '<p style="text-align: center; padding: 20px; color: var(--text-secondary);">لا يوجد مشاركين بعد</p>'}
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="action-buttons">
+                    <button class="action-btn" onclick="joinCompetition()">المشاركة في المسابقة</button>
+                    <button class="action-btn secondary" onclick="shareCompetition()">مشاركة المسابقة</button>
+                </div>
+            `;
+        }
+
+        // Join Competition
+        async function joinCompetition() {
+            try {
+                await window.joinCompetition(currentCompetitionId);
+                showSuccess('تمت المشاركة في المسابقة بنجاح!');
+            } catch (error) {
+                console.error('Error joining competition:', error);
+                showError('حدث خطأ في المشاركة في المسابقة');
+            }
+        }
+
+        // Share Competition
+        function shareCompetition() {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'مسابقة Game DIIB',
+                    text: 'انضم إلى هذه المسابقة المثيرة على Game DIIB!'
+                });
+            } else {
+                // Fallback for browsers that don't support Web Share API
+                const url = window.location.href;
+                navigator.clipboard.writeText(url).then(() => {
+                    showSuccess('تم نسخ رابط المسابقة!');
+                }).catch(() => {
+                    showError('فشل في نسخ الرابط');
+                });
+            }
+        }
+
+        // Get competition ID from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const competitionId = urlParams.get('id');
+
+        if (competitionId) {
+            loadCompetitionDetails(competitionId);
+        } else {
+            showError('معرف المسابقة غير موجود');
+            setTimeout(() => {
+                navigateToCompetitions();
+            }, 2000);
+        }
+    </script>
+</body>
+</html>

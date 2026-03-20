@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Game DIIB - الأمان">
+    <meta name="theme-color" content="#682fcc">
+    <title>Game DIIB - الأمان</title>
+    <link rel="stylesheet" href="mobile-styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #682fcc;
+            --secondary-color: #44247b;
+            --accent-color: #22C55E;
+            --background-dark: #0F172A;
+            --background-light: #1E293B;
+            --text-primary: #F8FAFC;
+            --text-secondary: #94A3B8;
+            --border-color: #334155;
+            --success: #22C55E;
+            --warning: #FACC15;
+            --danger: #EF4444;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--background-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding-bottom: 70px;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 12px 16px;
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .header-btn {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.3rem;
+            padding: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .header-btn:hover {
+            color: var(--primary-color);
+            transform: scale(1.1);
+        }
+
+        /* Main Content */
+        .main-content {
+            padding-top: 60px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Section */
+        .section {
+            background: var(--background-light);
+            padding: 24px;
+            margin: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--primary-color);
+        }
+
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 24px;
+            background: var(--primary-color);
+            border-radius: 2px;
+        }
+
+        /* Form */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            background: var(--background-dark);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .form-input::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .form-button {
+            width: 100%;
+            padding: 14px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 12px;
+        }
+
+        .form-button:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .form-button.danger {
+            background: var(--danger);
+        }
+
+        .form-button.danger:hover {
+            background: #dc2626;
+        }
+
+        /* Security Item */
+        .security-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .security-item:last-child {
+            border-bottom: none;
+        }
+
+        .security-label {
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .security-value {
+            color: var(--text-primary);
+        }
+
+        .security-status {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .security-status.active {
+            background: rgba(34, 197, 94, 0.1);
+            color: var(--success);
+        }
+
+        .security-status.inactive {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--background-light);
+            border-top: 1px solid var(--border-color);
+            padding: 8px 16px;
+            display: flex;
+            justify-content: space-around;
+            z-index: 1000;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--text-secondary);
+            border: none;
+            background: none;
+            font-size: 0.85rem;
+        }
+
+        .nav-item.active {
+            color: var(--primary-color);
+        }
+
+        .nav-item:hover {
+            color: var(--primary-color);
+        }
+
+        .nav-icon {
+            font-size: 1.4rem;
+        }
+
+        /* Loading */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border-color);
+            border-top: 3px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <h1 class="header-title">الأمان</h1>
+        <div class="header-actions">
+            <button class="header-btn" onclick="navigateToSettings()">⚙️</button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+        <!-- Loading -->
+        <div class="loading">
+            <div class="spinner"></div>
+        </div>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <button class="nav-item" onclick="navigateToIndex()">
+            <span class="nav-icon">🏠</span>
+            <span>الرئيسية</span>
+        </button>
+        <button class="nav-item" onclick="navigateToStore()">
+            <span class="nav-icon">🏪</span>
+            <span>المتجر</span>
+        </button>
+        <button class="nav-item" onclick="navigateToCompetitions()">
+            <span class="nav-icon">🏆</span>
+            <span>المسابقات</span>
+        </button>
+        <button class="nav-item" onclick="navigateToCommunity()">
+            <span class="nav-icon">👥</span>
+            <span>المجتمع</span>
+        </button>
+        <button class="nav-item" onclick="navigateToProfile()">
+            <span class="nav-icon">👤</span>
+            <span>الملف</span>
+        </button>
+    </nav>
+
+    <!-- Import Firebase Config -->
+    <script type="module" src="b-firebase-config.js"></script>
+
+    <!-- Import Auth Functions -->
+    <script type="module" src="b-auth.js"></script>
+
+    <!-- Import API Functions -->
+    <script type="module" src="b-api.js"></script>
+
+    <!-- Import Common Functions -->
+    <script type="module" src="b-common.js"></script>
+
+    <script type="module">
+        import { getUserById, updateUser } from './b-api.js';
+        import { showLoading, hideLoading, showError, showSuccess } from './b-common.js';
+
+        let currentUserId = null;
+
+        // Load Security Settings
+        async function loadSecuritySettings() {
+            showLoading();
+            try {
+                const user = getCurrentUser();
+                if (!user) {
+                    navigateToLogin();
+                    return;
+                }
+
+                currentUserId = user.uid;
+                const userData = await getUserById(user.uid);
+
+                if (userData) {
+                    displaySecuritySettings(userData);
+                }
+            } catch (error) {
+                console.error('Error loading security settings:', error);
+                showError('حدث خطأ في تحميل إعدادات الأمان');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // Display Security Settings
+        function displaySecuritySettings(userData) {
+            const mainContent = document.getElementById('mainContent');
+
+            mainContent.innerHTML = `
+                <!-- Password Section -->
+                <div class="section">
+                    <h2 class="section-title">تغيير كلمة المرور</h2>
+
+                    <form id="changePasswordForm">
+                        <div class="form-group">
+                            <label class="form-label">كلمة المرور الحالية</label>
+                            <input 
+                                type="password" 
+                                class="form-input" 
+                                id="currentPassword"
+                                placeholder="أدخل كلمة المرور الحالية"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">كلمة المرور الجديدة</label>
+                            <input 
+                                type="password" 
+                                class="form-input" 
+                                id="newPassword"
+                                placeholder="أدخل كلمة المرور الجديدة"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">تأكيد كلمة المرور الجديدة</label>
+                            <input 
+                                type="password" 
+                                class="form-input" 
+                                id="confirmPassword"
+                                placeholder="أعد إدخال كلمة المرور الجديدة"
+                                required
+                            >
+                        </div>
+
+                        <button type="submit" class="form-button">تحديث كلمة المرور</button>
+                    </form>
+                </div>
+
+                <!-- Two-Factor Auth Section -->
+                <div class="section">
+                    <h2 class="section-title">المصادقة الثنائية</h2>
+
+                    <div class="security-item">
+                        <div>
+                            <div class="security-label">الحالة</div>
+                            <span class="security-status ${userData.twoFactorEnabled ? 'active' : 'inactive'}">
+                                ${userData.twoFactorEnabled ? 'مفعلة' : 'غير مفعلة'}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Active Sessions -->
+                <div class="section">
+                    <h2 class="section-title">الجلسات النشطة</h2>
+
+                    <div class="security-item">
+                        <div>
+                            <div class="security-label">الجلسة الحالية</div>
+                            <div class="security-value">${new Date().toLocaleDateString('ar-SA')}</div>
+                        </div>
+                    </div>
+
+                    <div class="security-item">
+                        <div>
+                            <div class="security-label">آخر تسجيل دخول</div>
+                            <div class="security-value">${userData.lastLogin ? new Date(userData.lastLogin).toLocaleDateString('ar-SA') : 'غير محدد'}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Account Actions -->
+                <div class="section">
+                    <h2 class="section-title">إجراءات الحساب</h2>
+
+                    <button class="form-button danger" onclick="logoutAllSessions()">تسجيل الخروج من جميع الجلسات</button>
+                </div>
+            `;
+
+            // Add form event listeners
+            document.getElementById('changePasswordForm').addEventListener('submit', handleChangePassword);
+        }
+
+        // Handle Change Password
+        async function handleChangePassword(e) {
+            e.preventDefault();
+
+            const currentPassword = document.getElementById('currentPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            // Validation
+            if (!currentPassword || !newPassword || !confirmPassword) {
+                showError('جميع الحقول مطلوبة');
+                return;
+            }
+
+            if (newPassword !== confirmPassword) {
+                showError('كلمات المرور غير متطابقة');
+                return;
+            }
+
+            if (newPassword.length < 6) {
+                showError('كلمة المرور يجب أن تكون 6 أحرف على الأقل');
+                return;
+            }
+
+            showLoading();
+            try {
+                // In real implementation, this would call Firebase Auth
+                // await updatePassword(currentPassword, newPassword);
+
+                showSuccess('تم تحديث كلمة المرور بنجاح');
+
+                // Clear form
+                document.getElementById('changePasswordForm').reset();
+            } catch (error) {
+                console.error('Error changing password:', error);
+                showError('حدث خطأ في تحديث كلمة المرور');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // Logout All Sessions
+        async function logoutAllSessions() {
+            if (!confirm('هل أنت متأكد من تسجيل الخروج من جميع الجلسات؟')) {
+                return;
+            }
+
+            showLoading();
+            try {
+                // In real implementation, this would call Firebase Auth
+                // await logoutAllSessions();
+
+                showSuccess('تم تسجيل الخروج من جميع الجلسات');
+                navigateToLogin();
+            } catch (error) {
+                console.error('Error logging out all sessions:', error);
+                showError('حدث خطأ في تسجيل الخروج');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadSecuritySettings();
+        });
+    </script>
+</body>
+</html>

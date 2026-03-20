@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Favicon Generator</title>
+</head>
+<body>
+    <canvas id="canvas" width="32" height="32"></canvas>
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+
+        // رسم أيقونة بسيطة
+        ctx.fillStyle = '#682fcc';
+        ctx.fillRect(0, 0, 32, 32);
+
+        ctx.fillStyle = '#FFFFFF';
+        ctx.font = 'bold 20px Arial';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('G', 16, 16);
+
+        // تحويل إلى صورة
+        const dataUrl = canvas.toDataURL('image/png');
+        console.log('Favicon generated:', dataUrl);
+    </script>
+</body>
+</html>

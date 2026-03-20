@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Game DIIB - المساعدة">
+    <meta name="theme-color" content="#682fcc">
+    <title>Game DIIB - المساعدة</title>
+    <link rel="stylesheet" href="mobile-styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #682fcc;
+            --secondary-color: #44247b;
+            --accent-color: #22C55E;
+            --background-dark: #0F172A;
+            --background-light: #1E293B;
+            --text-primary: #F8FAFC;
+            --text-secondary: #94A3B8;
+            --border-color: #334155;
+            --success: #22C55E;
+            --warning: #FACC15;
+            --danger: #EF4444;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--background-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding-bottom: 70px;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 12px 16px;
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .header-btn {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.3rem;
+            padding: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .header-btn:hover {
+            color: var(--primary-color);
+            transform: scale(1.1);
+        }
+
+        /* Main Content */
+        .main-content {
+            padding-top: 60px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Search */
+        .search-container {
+            padding: 20px;
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 14px 16px;
+            background: var(--background-light);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-bar:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        /* FAQ Categories */
+        .categories {
+            display: flex;
+            gap: 8px;
+            padding: 20px;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+
+        .categories::-webkit-scrollbar {
+            display: none;
+        }
+
+        .category-btn {
+            padding: 10px 20px;
+            background: var(--background-light);
+            border: 2px solid var(--border-color);
+            border-radius: 20px;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .category-btn:hover,
+        .category-btn.active {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            color: white;
+        }
+
+        /* FAQ Items */
+        .faq-list {
+            padding: 20px;
+        }
+
+        .faq-item {
+            background: var(--background-light);
+            padding: 20px;
+            margin-bottom: 12px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .faq-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .faq-question {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .faq-question::before {
+            content: '?';
+            width: 24px;
+            height: 24px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            color: white;
+        }
+
+        .faq-answer {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            display: none;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .faq-item.open .faq-answer {
+            display: block;
+        }
+
+        /* Contact Section */
+        .contact-section {
+            background: var(--background-light);
+            padding: 24px;
+            margin: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .contact-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--primary-color);
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .contact-item:last-child {
+            border-bottom: none;
+        }
+
+        .contact-icon {
+            font-size: 1.5rem;
+        }
+
+        .contact-info {
+            flex: 1;
+        }
+
+        .contact-label {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .contact-value {
+            color: var(--text-secondary);
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--background-light);
+            border-top: 1px solid var(--border-color);
+            padding: 8px 16px;
+            display: flex;
+            justify-content: space-around;
+            z-index: 1000;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--text-secondary);
+            border: none;
+            background: none;
+            font-size: 0.85rem;
+        }
+
+        .nav-item.active {
+            color: var(--primary-color);
+        }
+
+        .nav-item:hover {
+            color: var(--primary-color);
+        }
+
+        .nav-icon {
+            font-size: 1.4rem;
+        }
+
+        /* Loading */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border-color);
+            border-top: 3px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-secondary);
+        }
+
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .empty-text {
+            font-size: 1.1rem;
+            margin-bottom: 16px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <h1 class="header-title">المساعدة</h1>
+        <div class="header-actions">
+            <button class="header-btn" onclick="navigateToSettings()">⚙️</button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Search -->
+        <div class="search-container">
+            <input 
+                type="text" 
+                class="search-bar" 
+                id="searchBar"
+                placeholder="ابحث في الأسئلة الشائعة..."
+            >
+        </div>
+
+        <!-- FAQ Categories -->
+        <div class="categories">
+            <button class="category-btn active" data-category="all">الكل</button>
+            <button class="category-btn" data-category="account">الحساب</button>
+            <button class="category-btn" data-category="games">الألعاب</button>
+            <button class="category-btn" data-category="assets">الأصول</button>
+            <button class="category-btn" data-category="competitions">المسابقات</button>
+            <button class="category-btn" data-category="earnings">الأرباح</button>
+            <button class="category-btn" data-category="technical">تقني</button>
+        </div>
+
+        <!-- FAQ List -->
+        <div class="faq-list" id="faqList">
+            <!-- FAQ items will be loaded dynamically -->
+        </div>
+
+        <!-- Contact Section -->
+        <div class="contact-section">
+            <h2 class="contact-title">تواصل معنا</h2>
+
+            <div class="contact-item">
+                <div class="contact-icon">📧</div>
+                <div class="contact-info">
+                    <div class="contact-label">البريد الإلكتروني</div>
+                    <div class="contact-value">support@gamediib.com</div>
+                </div>
+            </div>
+
+            <div class="contact-item">
+                <div class="contact-icon">💬</div>
+                <div class="contact-info">
+                    <div class="contact-label">الدردشة الحية</div>
+                    <div class="contact-value">متاحة 24/7</div>
+                </div>
+            </div>
+
+            <div class="contact-item">
+                <div class="contact-icon">📱</div>
+                <div class="contact-info">
+                    <div class="contact-label">الهاتف</div>
+                    <div class="contact-value">+966 XXXXXXXXXX</div>
+                </div>
+            </div>
+
+            <div class="contact-item">
+                <div class="contact-icon">🌐</div>
+                <div class="contact-info">
+                    <div class="contact-label">الموقع</div>
+                    <div class="contact-value">www.gamediib.com</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <button class="nav-item" onclick="navigateToIndex()">
+            <span class="nav-icon">🏠</span>
+            <span>الرئيسية</span>
+        </button>
+        <button class="nav-item" onclick="navigateToStore()">
+            <span class="nav-icon">🏪</span>
+            <span>المتجر</span>
+        </button>
+        <button class="nav-item" onclick="navigateToCompetitions()">
+            <span class="nav-icon">🏆</span>
+            <span>المسابقات</span>
+        </button>
+        <button class="nav-item" onclick="navigateToCommunity()">
+            <span class="nav-icon">👥</span>
+            <span>المجتمع</span>
+        </button>
+        <button class="nav-item" onclick="navigateToProfile()">
+            <span class="nav-icon">👤</span>
+            <span>الملف</span>
+        </button>
+    </nav>
+
+    <!-- Import Firebase Config -->
+    <script type="module" src="b-firebase-config.js"></script>
+
+    <!-- Import Common Functions -->
+    <script type="module" src="b-common.js"></script>
+
+    <script type="module">
+        import { showLoading, hideLoading, showError } from './b-common.js';
+
+        let currentCategory = 'all';
+
+        // FAQ Data
+        const faqData = [
+            {
+                category: 'account',
+                question: 'كيف أنشئ حساب جديد؟',
+                answer: 'يمكنك إنشاء حساب جديد بالضغط على زر "إنشاء حساب" في صفحة تسجيل الدخول. ستحتاج إلى إدخال اسمك، البريد الإلكتروني، رقم الهاتف، وكلمة المرور. بعد التسجيل، ستحتاج إلى التحقق من بريدك الإلكتروني.'
+            },
+            {
+                category: 'games',
+                question: 'كيف أنشر لعبة جديدة؟',
+                answer: 'يمكنك نشر لعبة جديدة من خلال صفحة "نشر محتوى". ستحتاج إلى رفع ملف اللعبة وصورة الغلاف، وإضافة وصف تفصيلي للعبة، وتحديد الفئة المناسبة.'
+            },
+            {
+                category: 'assets',
+                question: 'كيف أبيع أصول 3D؟',
+                answer: 'يمكنك بيع أصول 3D من خلال صفحة "نشر محتوى". ستحتاج إلى رفع النموذج 3D وصور معاينة، وإضافة وصف تفصيلي للأصل، وتحديد السعر المناسب.'
+            },
+            {
+                category: 'competitions',
+                question: 'كيف أشترك في مسابقة؟',
+                answer: 'يمكنك الاشتراك في المسابقات النشطة من خلال صفحة "المسابقات". اضغط على زر "اشترك" في المسابقة التي تريد المشاركة فيها.'
+            },
+            {
+                category: 'earnings',
+                question: 'كيف أسحب أرباحي؟',
+                answer: 'يمكنك سحب أرباحك من خلال صفحة "الأرباح". الحد الأدنى للسحب هو 100 DIIB. ستتم معالجة الطلب خلال 3-5 أيام عمل.'
+            },
+            {
+                category: 'technical',
+                question: 'ما هي العملة DIIB؟',
+                answer: 'DIIB هي العملة الرسمية لمنصة Game DIIB. يمكنك استخدامها لشراء الألعاب والأصول، والمشاركة في المسابقات، والحصول على مكافآت خاصة.'
+            }
+        ];
+
+        // Load FAQ
+        function loadFAQ() {
+            const faqList = document.getElementById('faqList');
+            faqList.innerHTML = '';
+
+            // Filter FAQ by category
+            let filteredFAQ = faqData;
+            if (currentCategory !== 'all') {
+                filteredFAQ = faqData.filter(item => item.category === currentCategory);
+            }
+
+            // Display FAQ
+            filteredFAQ.forEach(faq => {
+                const item = createFAQItem(faq);
+                faqList.appendChild(item);
+            });
+        }
+
+        // Create FAQ Item
+        function createFAQItem(faq) {
+            const item = document.createElement('div');
+            item.className = 'faq-item';
+            item.onclick = () => {
+                item.classList.toggle('open');
+            };
+
+            item.innerHTML = `
+                <div class="faq-question">${faq.question}</div>
+                <div class="faq-answer">${faq.answer}</div>
+            `;
+
+            return item;
+        }
+
+        // Search FAQ
+        function searchFAQ() {
+            const searchTerm = document.getElementById('searchBar').value.toLowerCase();
+
+            const faqList = document.getElementById('faqList');
+            faqList.innerHTML = '';
+
+            const filteredFAQ = faqData.filter(faq =>
+                faq.question.toLowerCase().includes(searchTerm) ||
+                faq.answer.toLowerCase().includes(searchTerm)
+            );
+
+            filteredFAQ.forEach(faq => {
+                const item = createFAQItem(faq);
+                faqList.appendChild(item);
+            });
+        }
+
+        // Category Filter
+        document.querySelectorAll('.category-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentCategory = btn.dataset.category;
+                loadFAQ();
+            });
+        });
+
+        // Search Handler
+        document.getElementById('searchBar').addEventListener('input', searchFAQ);
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadFAQ();
+        });
+    </script>
+</body>
+</html>
