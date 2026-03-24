@@ -1,0 +1,62 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    // Game Images
+    match /games/images/{allPaths=**} {
+      allow read: if true;
+      allow write: if request.auth != null &&
+                     request.resource.size < 1 * 1024 * 1024 && // 1MB
+                     request.resource.contentType.matches('image/.*');
+    }
+
+    // Game Thumbnails (old path - for compatibility)
+    match /games/thumbnails/{allPaths=**} {
+      allow read: if true;
+      allow write: if request.auth != null &&
+                     request.resource.size < 1 * 1024 * 1024 && // 1MB
+                     request.resource.contentType.matches('image/.*');
+    }
+
+    // Game Files
+    match /games/files/{allPaths=**} {
+      allow read: if true;
+      allow write: if request.auth != null &&
+                     request.resource.size < 10 * 1024 * 1024 && // 10MB
+                     request.resource.contentType.matches('application/.*');
+    }
+
+    // User Avatars - New path
+    match /avatars/{userId}/{allPaths=**} {
+      allow read: if true;
+      allow write: if request.auth != null &&
+                     request.auth.uid == userId &&
+                     request.resource.size < 2 * 1024 * 1024 && // 2MB
+                     request.resource.contentType.matches('image/.*');
+    }
+
+    // User Avatars - Old path (for compatibility)
+    match /users/avatars/{allPaths=**} {
+      allow read: if true;
+      allow write: if request.auth != null &&
+                     request.resource.size < 2 * 1024 * 1024 && // 2MB
+                     request.resource.contentType.matches('image/.*');
+    }
+
+    // Competition Images
+    match /competitions/images/{allPaths=**} {
+      allow read: if true;
+      allow write: if request.auth != null &&
+                     request.resource.size < 5 * 1024 * 1024 && // 5MB
+                     request.resource.contentType.matches('image/.*');
+    }
+
+    // 3D Models
+    match /models/{allPaths=**} {
+      allow read: if true;
+      allow write: if request.auth != null &&
+                     request.resource.size < 20 * 1024 * 1024 && // 20MB
+                     request.resource.contentType.matches('model/.*|application/.*');
+    }
+  }
+}

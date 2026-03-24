@@ -331,6 +331,105 @@
             margin-bottom: 24px;
         }
 
+        /* Active Chats Section */
+        .active-chats {
+            margin-bottom: 24px;
+        }
+
+        .chat-card {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px;
+            background: var(--background-light);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            margin-bottom: 12px;
+        }
+
+        .chat-card:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .chat-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--border-color);
+            position: relative;
+        }
+
+        .chat-avatar::after {
+            content: '';
+            position: absolute;
+            bottom: 2px;
+            right: 2px;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: var(--success-color);
+            border: 2px solid var(--background-light);
+        }
+
+        .chat-avatar.offline::after {
+            background: var(--text-secondary);
+        }
+
+        .chat-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .chat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+
+        .chat-name {
+            font-weight: 700;
+            font-size: 1.05rem;
+            color: var(--text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .chat-time {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            white-space: nowrap;
+        }
+
+        .chat-message {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .chat-message.unread {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .chat-badge {
+            background: var(--primary-color);
+            color: white;
+            font-size: 0.75rem;
+            padding: 2px 8px;
+            border-radius: 10px;
+            min-width: 20px;
+            text-align: center;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .header {
@@ -386,6 +485,12 @@
 
         <!-- Friends List -->
         <div id="friendsList" style="display: none;">
+            <!-- Active Chats -->
+            <div class="active-chats" id="activeChats" style="display: none;">
+                <h3 class="section-title">💬 المحادثات النشطة</h3>
+                <div id="activeChatsList"></div>
+            </div>
+
             <!-- Online Friends -->
             <div class="online-friends" id="onlineFriends" style="display: none;">
                 <h3 class="section-title">المتصلون الآن</h3>
@@ -433,6 +538,8 @@
         const searchInput = document.getElementById('searchInput');
         const loading = document.getElementById('loading');
         const friendsList = document.getElementById('friendsList');
+        const activeChats = document.getElementById('activeChats');
+        const activeChatsList = document.getElementById('activeChatsList');
         const onlineFriends = document.getElementById('onlineFriends');
         const onlineFriendsList = document.getElementById('onlineFriendsList');
         const allFriendsList = document.getElementById('allFriendsList');
@@ -476,6 +583,9 @@
 
                 loading.style.display = 'none';
                 friendsList.style.display = 'block';
+
+                // Load active chats
+                await loadActiveChats();
 
                 // Separate online and offline users
                 const onlineUsers = otherUsers.filter(u => u.status === 'online');
@@ -540,6 +650,164 @@
                 'player': 'لاعب'
             };
             return roles[role] || 'لاعب';
+        }
+
+        // Load Active Chats (Optimized)
+        let loadActiveChatsPromise = null;
+        async function loadActiveChats() {
+            // Prevent multiple simultaneous loads
+            if (loadActiveChatsPromise) {
+                return loadActiveChatsPromise;
+            }
+
+            loadActiveChatsPromise = (async () => {
+                try {
+                    // Show loading indicator
+                    activeChatsList.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+
+                    // Get all users to find potential chat partners
+                    const usersSnapshot = await getDocs(collection(db, 'users'));
+                    const allUsers = usersSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+                    // Filter out current user and limit to recent users
+                    const otherUsers = allUsers
+                        .filter(u => u.id !== currentUser.uid)
+                        .slice(0, 10); // Reduced to 10 users for better performance
+
+                    // Check for active chats with each user
+                    const userChats = [];
+                    const chatPromises = otherUsers.map(async (user) => {
+                        // Create chat ID
+                        const chatIds = [currentUser.uid, user.id].sort();
+                        const chatId = `${chatIds[0]}_${chatIds[1]}`;
+
+                        try {
+                            // Check if chat exists and has messages
+                            const messagesRef = collection(db, 'chats', chatId, 'messages');
+                            const messagesSnapshot = await getDocs(messagesRef);
+
+                            if (!messagesSnapshot.empty) {
+                                // Find the last message by sorting manually
+                                const messages = messagesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                                messages.sort((a, b) => {
+                                    if (!a.timestamp) return 1;
+                                    if (!b.timestamp) return -1;
+                                    return b.timestamp.toDate() - a.timestamp.toDate();
+                                });
+                                const lastMessage = messages[0];
+
+                                return {
+                                    id: chatId,
+                                    otherUserId: user.id,
+                                    otherUserName: user.name || user.displayName || 'مستخدم',
+                                    otherUserRole: user.role || 'player',
+                                    otherUserAvatar: user.avatar || user.photoURL || 'https://placehold.co/56x56?text=👤',
+                                    otherUserStatus: user.status || 'offline',
+                                    lastMessage: lastMessage.text || 'بدء محادثة',
+                                    lastMessageTime: lastMessage.timestamp || null,
+                                    unreadCount: 0 // TODO: Implement unread count
+                                };
+                            }
+                            return null;
+                        } catch (error) {
+                            console.error(`Error checking chat with user ${user.id}:`, error);
+                            return null;
+                        }
+                    });
+
+                    // Wait for all chat checks to complete
+                    const chatResults = await Promise.all(chatPromises);
+                    chatResults.forEach(chat => {
+                        if (chat) userChats.push(chat);
+                    });
+
+                    // Sort chats by last message time
+                    userChats.sort((a, b) => {
+                        if (!a.lastMessageTime) return 1;
+                        if (!b.lastMessageTime) return -1;
+                        return b.lastMessageTime.toDate() - a.lastMessageTime.toDate();
+                    });
+
+                    // Display active chats
+                    if (userChats.length > 0) {
+                        activeChats.style.display = 'block';
+                        activeChatsList.innerHTML = '';
+                        userChats.forEach(chat => {
+                            activeChatsList.appendChild(createChatCard(chat));
+                        });
+                    } else {
+                        activeChats.style.display = 'none';
+                    }
+                } catch (error) {
+                    console.error('Error loading active chats:', error);
+                    activeChats.style.display = 'none';
+                } finally {
+                    loadActiveChatsPromise = null;
+                }
+            })();
+
+            return loadActiveChatsPromise;
+        }
+
+        // Create Chat Card
+        function createChatCard(chat) {
+            const card = document.createElement('div');
+            card.className = 'chat-card';
+            card.dataset.chatId = chat.id;
+            card.dataset.userId = chat.otherUserId;
+
+            const timeText = chat.lastMessageTime 
+                ? getTimeAgo(chat.lastMessageTime.toDate())
+                : '';
+
+            card.innerHTML = `
+                <img src="${chat.otherUserAvatar}" 
+                     alt="${chat.otherUserName}" 
+                     class="chat-avatar ${chat.otherUserStatus === 'offline' ? 'offline' : ''}">
+                <div class="chat-info">
+                    <div class="chat-header">
+                        <div class="chat-name">${chat.otherUserName}</div>
+                        <div class="chat-time">${timeText}</div>
+                    </div>
+                    <div class="chat-message ${chat.unreadCount > 0 ? 'unread' : ''}">
+                        ${chat.lastMessage}
+                    </div>
+                </div>
+                ${chat.unreadCount > 0 ? `<div class="chat-badge">${chat.unreadCount}</div>` : ''}
+            `;
+            return card;
+        }
+
+        // Get Time Ago
+        function getTimeAgo(date) {
+            const seconds = Math.floor((new Date() - date) / 1000);
+
+            let interval = seconds / 31536000;
+            if (interval > 1) {
+                return Math.floor(interval) + ' سنة';
+            }
+
+            interval = seconds / 2592000;
+            if (interval > 1) {
+                return Math.floor(interval) + ' شهر';
+            }
+
+            interval = seconds / 86400;
+            if (interval > 1) {
+                return Math.floor(interval) + ' يوم';
+            }
+
+            interval = seconds / 3600;
+            if (interval > 1) {
+                return Math.floor(interval) + ' ساعة';
+            }
+
+            interval = seconds / 60;
+            if (interval > 1) {
+                return Math.floor(interval) + ' دقيقة';
+            }
+
+            return 'الآن';
         }
 
         // Show Error
@@ -621,6 +889,7 @@
             const chatBtn = e.target.closest('.friend-action-btn.chat');
             const profileBtn = e.target.closest('.friend-action-btn:not(.chat)');
             const friendCard = e.target.closest('.friend-card');
+            const chatCard = e.target.closest('.chat-card');
 
             if (chatBtn) {
                 e.stopPropagation();
@@ -633,6 +902,10 @@
             } else if (friendCard) {
                 const userId = friendCard.querySelector('.friend-action-btn').dataset.userId;
                 window.location.href = `b-profile.html?userId=${userId}`;
+            } else if (chatCard) {
+                const chatId = chatCard.dataset.chatId;
+                const userId = chatCard.dataset.userId;
+                window.location.href = `b-chat-room.html?chatId=${chatId}&userId=${userId}`;
             }
         });
 

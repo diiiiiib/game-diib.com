@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="الصفحة غير موجودة - Game DIIB">
+    <meta name="theme-color" content="#682fcc">
+    <title>الصفحة غير موجودة - Game DIIB</title>
+    <link rel="stylesheet" href="mobile-styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #682fcc;
+            --secondary-color: #44247b;
+            --background-dark: #0F172A;
+            --background-light: #1E293B;
+            --text-primary: #F8FAFC;
+            --text-secondary: #94A3B8;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--background-dark);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .error-container {
+            max-width: 500px;
+        }
+
+        .error-code {
+            font-size: 8rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            opacity: 0.8;
+        }
+
+        .error-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .error-message {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+            line-height: 1.6;
+        }
+
+        .error-actions {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .error-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .error-btn:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .error-btn.secondary {
+            background: var(--background-light);
+            color: var(--text-primary);
+            border: 2px solid var(--border-color);
+        }
+
+        .error-btn.secondary:hover {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <div class="error-code">404</div>
+        <h1 class="error-title">الصفحة غير موجودة</h1>
+        <p class="error-message">
+            عذراً، الصفحة التي تبحث عنها غير موجودة أو تم نقلها.
+            يرجى التحقق من الرابط أو العودة إلى الصفحة الرئيسية.
+        </p>
+
+        <div class="error-actions">
+            <a href="/" class="error-btn">
+                🏠 العودة للرئيسية
+            </a>
+            <a href="/b-community.html" class="error-btn secondary">
+                🌐 المجتمع
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Auto redirect after 10 seconds
+        setTimeout(() => {
+            window.location.href = '/';
+        }, 10000);
+    </script>
+</body>
+</html>

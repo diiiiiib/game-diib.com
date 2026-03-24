@@ -1,9 +1,10 @@
 // ==========================================
 // GAME DIIB - Firebase Configuration
+// ⚠️  تحذير أمني: في الإنتاج، يجب إخفاء هذه المفاتيح باستخدام متغيرات البيئة
 // ==========================================
 
 // Firebase Configuration
-const firebaseConfig = {
+export const firebaseConfig = {
     apiKey: "AIzaSyDNUd80AsJCBRAyRCSOV05-Xie51-diWz0",
     authDomain: "adiibme.firebaseapp.com",
     projectId: "adiibme",
@@ -13,24 +14,8 @@ const firebaseConfig = {
     measurementId: "G-CKYWMEZ9M8"
 };
 
-// Initialize Firebase
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js';
-import { getAuth } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js';
-import { getFirestore, doc, collection, serverTimestamp, setDoc, getDoc, updateDoc } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js';
-import { getStorage, ref, uploadBytes, getDownloadURL as getStorageDownloadURL } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-storage.js';
-import { getAnalytics } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-analytics.js';
-
-// Initialize Firebase App
-const app = initializeApp(firebaseConfig);
-
-// Initialize Firebase Services
-const auth = getAuth(app);
-const db = getFirestore(app);
-const storage = getStorage(app);
-const analytics = getAnalytics(app);
-
 // Firebase Collections Names
-const COLLECTIONS = {
+export const COLLECTIONS = {
     USERS: 'users',
     GAMES: 'games',
     COMPETITIONS: 'competitions',
@@ -43,21 +28,42 @@ const COLLECTIONS = {
     MODEL_RATINGS: 'model_ratings',
     TRANSACTIONS: 'transactions',
     WITHDRAWALS: 'withdrawals',
-    DEPOSITS: 'deposits'
+    DEPOSITS: 'deposits',
+    CHATS: 'chats',
+    MESSAGES: 'messages'
 };
 
+// Initialize Firebase
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js';
+import { getAuth } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js';
+import { getFirestore, doc, collection, serverTimestamp, setDoc, getDoc, updateDoc, addDoc, deleteDoc, query, where, orderBy, limit, getDocs, arrayUnion, arrayRemove, increment, runTransaction } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js';
+import { getStorage, ref, uploadBytes, getDownloadURL as getStorageDownloadURL, deleteObject } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-storage.js';
+import { getAnalytics } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-analytics.js';
+
+// Initialize Firebase App
+const app = initializeApp(firebaseConfig);
+
+// Initialize Firebase Services
+export const auth = getAuth(app);
+export const db = getFirestore(app);
+export const storage = getStorage(app);
+export const analytics = getAnalytics(app);
+
+// Import additional Firebase Auth functions
+import { onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js';
+
 // Helper function to get document reference
-const getDocRef = (collectionName, docId) => {
+export const getDocRef = (collectionName, docId) => {
     return doc(db, collectionName, docId);
 };
 
 // Helper function to get collection reference
-const getCollectionRef = (collectionName) => {
+export const getCollectionRef = (collectionName) => {
     return collection(db, collectionName);
 };
 
 // Helper function to handle errors
-const handleFirebaseError = (error) => {
+export const handleFirebaseError = (error) => {
     console.error('Firebase Error:', error);
     const errorMessages = {
         'auth/email-already-in-use': 'البريد الإلكتروني مستخدم بالفعل',
@@ -74,22 +80,31 @@ const handleFirebaseError = (error) => {
 
 // Export Firebase services and helpers
 export {
-    auth,
-    db,
-    storage,
-    analytics,
-    COLLECTIONS,
-    getDocRef,
-    getCollectionRef,
-    handleFirebaseError,
     doc,
     collection,
     serverTimestamp,
     setDoc,
     getDoc,
     updateDoc,
-    getStorage,
-    ref as storageRef,
+    ref,
     uploadBytes,
-    getStorageDownloadURL
+    getStorageDownloadURL,
+    deleteObject,
+    query,
+    where,
+    orderBy,
+    limit,
+    addDoc,
+    deleteDoc,
+    arrayUnion,
+    arrayRemove,
+    increment,
+    runTransaction,
+    getDocs,
+    onAuthStateChanged,
+    signInWithEmailAndPassword,
+    createUserWithEmailAndPassword,
+    signOut,
+    GoogleAuthProvider,
+    signInWithPopup
 };

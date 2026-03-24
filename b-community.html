@@ -90,17 +90,117 @@
         /* Tabs */
         .tabs {
             display: flex;
+            background: var(--background-light);
+            border-bottom: 2px solid var(--border-color);
+            position: sticky;
+            top: 60px;
+            z-index: 999;
+            margin-top: 60px;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        .tab:hover {
+            color: var(--primary-color);
+            background: rgba(104, 47, 204, 0.05);
+        }
+
+        .tab.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+        }
+
+        /* Main Tabs */
+        .main-tabs {
+            display: flex;
+            gap: 12px;
+            padding: 16px 20px;
+            background: var(--background-light);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 60px;
+            z-index: 999;
+            margin-top: 0;
+        }
+
+        .main-tab {
+            flex: 1;
+            padding: 12px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 12px;
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            background: var(--background-dark);
+            border: 2px solid var(--border-color);
+        }
+
+        .main-tab:hover {
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .main-tab.active {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            color: white;
+            box-shadow: 0 4px 12px rgba(104, 47, 204, 0.3);
+        }
+
+        .main-tab-icon {
+            font-size: 1.4rem;
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Filter Tabs */
+        .filter-tabs {
+            display: flex;
             gap: 8px;
             padding: 20px;
             overflow-x: auto;
             scrollbar-width: none;
         }
 
-        .tabs::-webkit-scrollbar {
+        .filter-tabs::-webkit-scrollbar {
             display: none;
         }
 
-        .tab {
+        .filter-tab {
             padding: 10px 20px;
             background: var(--background-light);
             border: 2px solid var(--border-color);
@@ -113,8 +213,8 @@
             white-space: nowrap;
         }
 
-        .tab:hover,
-        .tab.active {
+        .filter-tab:hover,
+        .filter-tab.active {
             background: var(--primary-color);
             border-color: var(--primary-color);
             color: white;
@@ -871,14 +971,14 @@
 
     <!-- Main Content -->
     <main class="main-content">
-        <!-- Tabs -->
-        <div class="tabs">
-            <button class="tab active" data-tab="posts">المنشورات</button>
-            <button class="tab" data-tab="friends">الأصدقاء</button>
-            <button class="tab" data-tab="discussions">النقاشات</button>
-            <button class="tab" data-tab="tutorials">الدروس</button>
-            <button class="tab" data-tab="showcase">الأعمال</button>
-            
+        <!-- Main Tabs -->
+        <div class="main-tabs">
+            <div class="main-tab active" data-tab="posts">
+                <div>المنشورات</div>
+            </div>
+            <div class="main-tab" data-tab="friends">
+                <div>الأصدقاء</div>
+            </div>
         </div>
 
         <!-- Posts List -->
@@ -905,6 +1005,16 @@
 
             <!-- Friends List -->
             <div id="friendsList">
+                <div class="loading">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Discussions Section -->
+        <div id="discussionsSection" style="display: none;">
+            <div class="section-title">💬 المحادثات النشطة</div>
+            <div id="discussionsList">
                 <div class="loading">
                     <div class="spinner"></div>
                 </div>
@@ -991,12 +1101,15 @@
     <script type="module">
         import { getUserById, getCommunityPosts, createCommunityPost, likeCommunityPost, getAllUsers } from './b-api.js';
         import { showLoading, hideLoading, getTimeAgo, showError, showSuccess, getCurrentUser } from './b-common.js';
+        import { collection, query, where, orderBy, getDocs, setDoc, updateDoc, doc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js';
+        import { db, COLLECTIONS } from './b-firebase-config.js';
 
         let currentTab = 'posts';
         let allPosts = [];
         let selectedImages = [];
         let allUsers = [];
         let filteredUsers = [];
+        let activeChats = [];
 
         // Load Community Posts
         async function loadCommunityPosts() {
@@ -1024,6 +1137,356 @@
                 showError('حدث خطأ في تحميل المنشورات');
             } finally {
                 hideLoading();
+            }
+        }
+
+        // Load Active Chats
+        async function loadActiveChats() {
+            showLoading();
+            try {
+                const discussionsList = document.getElementById('discussionsList');
+                const user = await getCurrentUser();
+
+                if (!user) {
+                    discussionsList.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-icon">🔒</div>
+                            <p class="empty-text">يرجى تسجيل الدخول لعرض المحادثات</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                console.log('Loading chats for user:', user.uid);
+
+                // Get all chats in the collection
+                const allChatsRef = collection(db, COLLECTIONS.CHATS);
+                const allChatsSnapshot = await getDocs(allChatsRef);
+                console.log('Total chats in database:', allChatsSnapshot.size);
+
+                // Filter chats where current user is participant
+                const userChats = [];
+                for (const doc of allChatsSnapshot.docs) {
+                    const chatId = doc.id;
+                    console.log('Checking chat ID:', chatId);
+
+                    // Check if chat ID contains user ID
+                    if (chatId.includes(user.uid)) {
+                        console.log('Found chat for user:', chatId);
+
+                        // Extract the other user ID from chat ID
+                        const userIds = chatId.split('_');
+                        const otherUserId = userIds.find(id => id !== user.uid);
+
+                        if (otherUserId) {
+                            console.log('Other user ID:', otherUserId);
+
+                            // Get user data
+                            const userData = await getUserById(otherUserId);
+                            console.log('User data:', userData);
+
+                            if (userData) {
+                                userChats.push({
+                                    id: chatId,
+                                    otherUserId: otherUserId,
+                                    otherUserName: userData.name,
+                                    otherUserRole: userData.role,
+                                    otherUserAvatar: userData.avatar,
+                                    lastMessage: 'محادثة نشطة'
+                                });
+                            }
+                        }
+                    }
+                }
+
+                console.log('User chats found:', userChats);
+
+                if (userChats.length === 0) {
+                    discussionsList.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-icon">💬</div>
+                            <p class="empty-text">لا توجد محادثات نشطة</p>
+                            <p style="color: var(--text-secondary);">ابدأ محادثة مع أصدقائك!</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                displayActiveChats(userChats);
+            } catch (error) {
+                console.error('Error loading active chats:', error);
+                showError('حدث خطأ في تحميل المحادثات');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // Display Active Chats
+        function displayActiveChats(chats) {
+            const discussionsList = document.getElementById('discussionsList');
+            discussionsList.innerHTML = '';
+
+            if (chats.length === 0) {
+                discussionsList.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">💬</div>
+                        <p class="empty-text">لا توجد محادثات نشطة</p>
+                        <p style="color: var(--text-secondary);">ابدأ محادثة مع أصدقائك!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            chats.forEach(chat => {
+                const card = createChatCard(chat);
+                discussionsList.appendChild(card);
+            });
+        }
+
+        // Create Chat Card
+        function createChatCard(chat) {
+            const card = document.createElement('div');
+            card.className = 'friend-card';
+            card.dataset.chatId = chat.id;
+            card.dataset.userId = chat.otherUserId;
+            card.innerHTML = `
+                <img src="${chat.otherUserAvatar || 'https://placehold.co/56x56'}" 
+                     alt="${chat.otherUserName}" 
+                     class="friend-avatar">
+                <div class="friend-info">
+                    <div class="friend-name">${chat.otherUserName}</div>
+                    <div class="friend-role">${getRoleText(chat.otherUserRole)}</div>
+                    <div class="friend-status">
+                        <span class="status-dot"></span>
+                        <span>${chat.lastMessage ? chat.lastMessage.substring(0, 50) + '...' : 'بدء محادثة'}</span>
+                    </div>
+                </div>
+                <div class="friend-actions">
+                    <button class="friend-action-btn chat" data-user-id="${chat.otherUserId}" data-chat-id="${chat.id}">
+                        💬
+                    </button>
+                </div>
+            `;
+            return card;
+        }
+
+        // Open Chat Room
+        async function openChatRoom(userId, chatId = null) {
+            try {
+                const user = await getCurrentUser();
+                if (!user) {
+                    showError('يرجى تسجيل الدخول أولاً');
+                    return;
+                }
+
+                let currentChatId = chatId;
+
+                // If no chatId provided, check if chat exists between users
+                if (!currentChatId) {
+                    const chatsRef = collection(db, COLLECTIONS.CHATS);
+                    const q = query(
+                        chatsRef,
+                        where('participants', 'array-contains', user.uid)
+                    );
+                    const querySnapshot = await getDocs(q);
+
+                    // Check if chat exists with this user
+                    const existingChat = querySnapshot.docs.find(doc => {
+                        const chatData = doc.data();
+                        return chatData.participants.includes(userId);
+                    });
+
+                    if (existingChat) {
+                        currentChatId = existingChat.id;
+                    } else {
+                        // Create new chat
+                        const newChatRef = doc(collection(db, COLLECTIONS.CHATS));
+                        await setDoc(newChatRef, {
+                            participants: [user.uid, userId],
+                            createdAt: serverTimestamp(),
+                            lastMessage: '',
+                            lastMessageTime: serverTimestamp(),
+                            createdBy: user.uid
+                        });
+                        currentChatId = newChatRef.id;
+                    }
+                }
+
+                // Open chat room modal
+                openChatRoomModal(currentChatId, userId);
+            } catch (error) {
+                console.error('Error opening chat room:', error);
+                showError('حدث خطأ في فتح المحادثة');
+            }
+        }
+
+        // Open Chat Room Modal
+        async function openChatRoomModal(chatId, otherUserId) {
+            try {
+                const user = await getCurrentUser();
+                if (!user) {
+                    showError('يرجى تسجيل الدخول أولاً');
+                    return;
+                }
+
+                // Get other user data
+                const otherUserData = await getUserById(otherUserId);
+                if (!otherUserData) {
+                    showError('المستخدم غير موجود');
+                    return;
+                }
+
+                // Create chat room modal
+                const modal = document.createElement('div');
+                modal.className = 'chat-room';
+                modal.id = 'chatRoomModal';
+                modal.innerHTML = `
+                    <div class="chat-room-header">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <img src="${otherUserData.avatar || 'https://placehold.co/40x40'}" 
+                                 alt="${otherUserData.name}" 
+                                 style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+                            <h2>${otherUserData.name}</h2>
+                        </div>
+                        <button class="chat-room-close" id="closeChatRoom">✕</button>
+                    </div>
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="loading">
+                            <div class="spinner"></div>
+                        </div>
+                    </div>
+                    <div class="chat-input-container">
+                        <input type="text" 
+                               class="chat-input" 
+                               id="chatInput" 
+                               placeholder="اكتب رسالتك..."
+                               autocomplete="off">
+                        <button class="chat-send-btn" id="sendMessageBtn">➤</button>
+                    </div>
+                `;
+
+                document.body.appendChild(modal);
+                modal.style.display = 'flex';
+
+                // Load chat messages
+                await loadChatMessages(chatId);
+
+                // Close chat room
+                document.getElementById('closeChatRoom').addEventListener('click', () => {
+                    modal.remove();
+                });
+
+                // Send message
+                document.getElementById('sendMessageBtn').addEventListener('click', () => sendMessage(chatId, user.uid));
+                document.getElementById('chatInput').addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        sendMessage(chatId, user.uid);
+                    }
+                });
+
+            } catch (error) {
+                console.error('Error opening chat room modal:', error);
+                showError('حدث خطأ في فتح المحادثة');
+            }
+        }
+
+        // Load Chat Messages
+        async function loadChatMessages(chatId) {
+            try {
+                console.log('Loading messages for chat:', chatId);
+
+                // Messages are stored in a subcollection: /chats/{chatId}/messages
+                const chatRef = doc(db, COLLECTIONS.CHATS, chatId);
+                const messagesRef = collection(chatRef, 'messages');
+
+                console.log('Messages collection path:', messagesRef.path);
+
+                const q = query(
+                    messagesRef,
+                    orderBy('timestamp', 'asc')
+                );
+
+                console.log('Querying messages...');
+                const querySnapshot = await getDocs(q);
+                console.log('Found messages:', querySnapshot.size);
+
+                const messagesContainer = document.getElementById('chatMessages');
+                messagesContainer.innerHTML = '';
+
+                if (querySnapshot.empty) {
+                    messagesContainer.innerHTML = `
+                        <div class="empty-state">
+                            <p class="empty-text">ابدأ المحادثة بإرسال رسالة!</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                querySnapshot.forEach(doc => {
+                    const messageData = doc.data();
+                    console.log('Message data:', messageData);
+                    const messageElement = createMessageElement(messageData);
+                    messagesContainer.appendChild(messageElement);
+                });
+
+                // Scroll to bottom
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            } catch (error) {
+                console.error('Error loading chat messages:', error);
+                showError('حدث خطأ في تحميل الرسائل');
+            }
+        }
+
+        // Create Message Element
+        function createMessageElement(messageData) {
+            const user = getCurrentUser();
+            const isSent = messageData.senderId === user.uid;
+
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `chat-message ${isSent ? 'sent' : 'received'}`;
+            messageDiv.innerHTML = `
+                <div class="chat-message-content">${messageData.text || messageData.content}</div>
+                <div class="chat-message-time">${getTimeAgo(messageData.timestamp)}</div>
+            `;
+
+            return messageDiv;
+        }
+
+        // Send Message
+        async function sendMessage(chatId, senderId) {
+            try {
+                const input = document.getElementById('chatInput');
+                const content = input.value.trim();
+
+                if (!content) {
+                    return;
+                }
+
+                console.log('Sending message:', { chatId, senderId, content });
+
+                // Add message to subcollection: /chats/{chatId}/messages
+                const chatRef = doc(db, COLLECTIONS.CHATS, chatId);
+                const messagesRef = collection(chatRef, 'messages');
+                const messageRef = doc(messagesRef);
+
+                console.log('Message ref path:', messageRef.path);
+
+                await setDoc(messageRef, {
+                    senderId: senderId,
+                    text: content,
+                    timestamp: serverTimestamp()
+                });
+
+                console.log('Message saved to database');
+
+                // Clear input
+                input.value = '';
+
+                // Reload messages
+                await loadChatMessages(chatId);
+            } catch (error) {
+                console.error('Error sending message:', error);
+                showError('حدث خطأ في إرسال الرسالة');
             }
         }
 
@@ -1087,6 +1550,81 @@
                 console.error('Error searching friends:', error);
                 showError('حدث خطأ في البحث');
             }
+        }
+
+        // Load Friends
+        async function loadFriends() {
+            try {
+                const friendsList = document.getElementById('friendsList');
+                friendsList.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+
+                // Get all users
+                const users = await getAllUsers();
+                const user = await getCurrentUser();
+
+                if (!users || users.length === 0) {
+                    friendsList.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-icon">👥</div>
+                            <p class="empty-text">لا يوجد أصدقاء حالياً</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                // Filter out current user
+                const otherUsers = users.filter(u => u.id !== user.uid);
+
+                if (otherUsers.length === 0) {
+                    friendsList.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-icon">👥</div>
+                            <p class="empty-text">لا يوجد أصدقاء حالياً</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                // Display all users
+                friendsList.innerHTML = '<div class="friends-list"><h3 class="section-title">جميع الأعضاء</h3></div>';
+                const friendsSection = friendsList.querySelector('.friends-list');
+
+                otherUsers.forEach(user => {
+                    const card = createFriendCard(user);
+                    friendsSection.appendChild(card);
+                });
+            } catch (error) {
+                console.error('Error loading friends:', error);
+                showError('حدث خطأ في تحميل الأصدقاء');
+            }
+        }
+
+        // Create Friend Card
+        function createFriendCard(user) {
+            const card = document.createElement('div');
+            card.className = 'friend-card';
+
+            const userName = user.name || user.displayName || 'مستخدم';
+            const userRole = user.role || 'player';
+            const userStatus = user.status || 'offline';
+            const userAvatar = user.avatar || user.photoURL || 'https://placehold.co/56x56?text=👤';
+
+            card.innerHTML = `
+                <img src="${userAvatar}" alt="${userName}" class="friend-avatar">
+                <div class="friend-info">
+                    <div class="friend-name">${userName}</div>
+                    <span class="friend-role">${getRoleText(userRole)}</span>
+                    <div class="friend-status">
+                        <span class="status-dot ${userStatus === 'offline' ? 'offline' : userStatus === 'busy' ? 'busy' : ''}"></span>
+                        <span>${userStatus === 'online' ? 'متصل' : userStatus === 'busy' ? 'مشغول' : 'غير متصل'}</span>
+                    </div>
+                </div>
+                <div class="friend-actions">
+                    <button class="friend-action-btn chat" data-user-id="${user.id}" title="دردشة">💬</button>
+                    <button class="friend-action-btn" data-user-id="${user.id}" title="الملف الشخصي">👤</button>
+                </div>
+            `;
+            return card;
         }
 
 
@@ -1291,12 +1829,26 @@
 
                 // Show/hide sections based on tab
                 const postsList = document.getElementById('postsList');
+                const friendsSection = document.getElementById('friendsSection');
+                const discussionsSection = document.getElementById('discussionsSection');
                 const createPostBtn = document.getElementById('createPostBtn');
 
+                // Hide all sections first
+                postsList.style.display = 'none';
+                friendsSection.style.display = 'none';
+                discussionsSection.style.display = 'none';
+                createPostBtn.style.display = 'none';
+
                 if (currentTab === 'friends') {
-                    // Navigate to friends page
-                    window.location.href = 'b-friends.html';
+                    // Show friends section
+                    friendsSection.style.display = 'block';
+                    loadFriends();
+                } else if (currentTab === 'discussions') {
+                    // Show discussions section
+                    discussionsSection.style.display = 'block';
+                    loadActiveChats();
                 } else {
+                    // Show posts section
                     postsList.style.display = 'block';
                     createPostBtn.style.display = 'flex';
                     loadCommunityPosts();
@@ -1339,6 +1891,26 @@
             }
         });
 
+        // Event delegation for discussions list
+        document.getElementById('discussionsList').addEventListener('click', (e) => {
+            const chatBtn = e.target.closest('.friend-action-btn.chat');
+            const chatCard = e.target.closest('.friend-card');
+
+            if (chatBtn) {
+                e.stopPropagation();
+                const userId = chatBtn.dataset.userId;
+                const chatId = chatBtn.dataset.chatId;
+                // Open chat room
+                openChatRoom(userId, chatId);
+            } else if (chatCard) {
+                e.stopPropagation();
+                const userId = chatCard.dataset.userId;
+                const chatId = chatCard.dataset.chatId;
+                // Open chat room
+                openChatRoom(userId, chatId);
+            }
+        });
+
         // Event listener for removing images
         document.getElementById('imagePreview').addEventListener('click', (e) => {
             const removeBtn = e.target.closest('.remove-image-btn');
@@ -1374,6 +1946,39 @@
 
         // Load posts on page load
         loadCommunityPosts();
+
+        // Main tabs functionality
+        const mainTabs = document.querySelectorAll('.main-tab');
+        const postsContent = document.getElementById('postsList');
+        const friendsContent = document.getElementById('friendsSection');
+
+        mainTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const targetTab = tab.dataset.tab;
+
+                // Remove active class from all tabs
+                mainTabs.forEach(t => t.classList.remove('active'));
+                // Add active class to clicked tab
+                tab.classList.add('active');
+
+                // Hide all content
+                if (postsContent) postsContent.style.display = 'none';
+                if (friendsContent) friendsContent.style.display = 'none';
+
+                // Show target content
+                if (targetTab === 'posts' && postsContent) {
+                    postsContent.style.display = 'block';
+                    if (allPosts.length === 0) {
+                        loadCommunityPosts();
+                    }
+                } else if (targetTab === 'friends' && friendsContent) {
+                    friendsContent.style.display = 'block';
+                    if (allUsers.length === 0) {
+                        loadFriends();
+                    }
+                }
+            });
+        });
     </script>
 
 

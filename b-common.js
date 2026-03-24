@@ -2,9 +2,6 @@
 // GAME DIIB - Common Functions
 // ==========================================
 
-// Import Firebase services
-import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js';
-
 // Import Firebase config
 import { auth, db, COLLECTIONS, getDocRef, getCollectionRef, handleFirebaseError } from './b-firebase-config.js';
 
@@ -23,73 +20,124 @@ export function sanitizeHTML(str) {
 }
 
 // ==========================================
-// UI FUNCTIONS
+// PERFORMANCE FUNCTIONS
 // ==========================================
 
-// Show error message
-export function showError(message) {
-    const errorContainer = document.createElement('div');
-    errorContainer.className = 'error-message';
-    errorContainer.textContent = message;
-    errorContainer.style.cssText = `
-        background: rgba(239, 68, 68, 0.1);
-        color: #EF4444;
-        padding: 12px;
-        border-radius: 8px;
-        margin-bottom: 16px;
-        text-align: center;
-        position: fixed;
-        top: 80px;
-        left: 50%;
-        transform: translateX(-50%);
-        z-index: 9999;
-        max-width: 90%;
-        font-size: 14px;
-        font-weight: 500;
+// Lazy load images
+export function lazyLoadImages() {
+    const images = document.querySelectorAll('img[data-src]');
+
+    const imageObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const img = entry.target;
+                img.src = img.dataset.src;
+                img.classList.remove('lazy');
+                observer.unobserve(img);
+            }
+        });
+    });
+
+    images.forEach(img => imageObserver.observe(img));
+}
+
+// Debounce function for performance
+export function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
+// Throttle function for performance
+export function throttle(func, limit) {
+    let inThrottle;
+    return function() {
+        const args = arguments;
+        const context = this;
+        if (!inThrottle) {
+            func.apply(context, args);
+            inThrottle = true;
+            setTimeout(() => inThrottle = false, limit);
+        }
+    }
+}
+
+// Show error message with enhanced UI
+export function showError(message, title = 'خطأ') {
+    // Remove existing notifications
+    removeNotifications();
+
+    const notification = document.createElement('div');
+    notification.className = 'notification notification-error show';
+    notification.innerHTML = `
+        <div class="notification-title">${title}</div>
+        <div class="notification-message">${message}</div>
     `;
 
-    const mainContent = document.querySelector('.main-content');
-    if (mainContent) {
-        mainContent.insertBefore(errorContainer, mainContent.firstChild);
-    }
+    document.body.appendChild(notification);
 
-    // Hide after 5 seconds
+    // Auto remove after 5 seconds
     setTimeout(() => {
-        errorContainer.style.display = 'none';
+        notification.classList.remove('show');
+        setTimeout(() => notification.remove(), 300);
     }, 5000);
 }
 
-// Show success message
-export function showSuccess(message) {
-    const successContainer = document.createElement('div');
-    successContainer.className = 'success-message';
-    successContainer.textContent = message;
-    successContainer.style.cssText = `
-        background: rgba(34, 197, 94, 0.1);
-        color: #22C55E;
-        padding: 12px;
-        border-radius: 8px;
-        margin-bottom: 16px;
-        text-align: center;
-        position: fixed;
-        top: 80px;
-        left: 50%;
-        transform: translateX(-50%);
-        z-index: 9999;
-        max-width: 90%;
-        font-size: 14px;
-        font-weight: 500;
+// Show success message with enhanced UI
+export function showSuccess(message, title = 'نجح') {
+    // Remove existing notifications
+    removeNotifications();
+
+    const notification = document.createElement('div');
+    notification.className = 'notification notification-success show';
+    notification.innerHTML = `
+        <div class="notification-title">${title}</div>
+        <div class="notification-message">${message}</div>
     `;
 
-    const mainContent = document.querySelector('.main-content');
-    if (mainContent) {
-        mainContent.insertBefore(successContainer, mainContent.firstChild);
-    }
+    document.body.appendChild(notification);
 
-    // Hide after 5 seconds
+    // Auto remove after 4 seconds
     setTimeout(() => {
-        successContainer.style.display = 'none';
-    }, 5000);
+        notification.classList.remove('show');
+        setTimeout(() => notification.remove(), 300);
+    }, 4000);
+}
+
+// Show warning message
+export function showWarning(message, title = 'تحذير') {
+    // Remove existing notifications
+    removeNotifications();
+
+    const notification = document.createElement('div');
+    notification.className = 'notification notification-warning show';
+    notification.innerHTML = `
+        <div class="notification-title">${title}</div>
+        <div class="notification-message">${message}</div>
+    `;
+
+    document.body.appendChild(notification);
+
+    // Auto remove after 4 seconds
+    setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => notification.remove(), 300);
+    }, 4000);
+}
+
+// Remove all notifications
+function removeNotifications() {
+    const notifications = document.querySelectorAll('.notification');
+    notifications.forEach(notification => {
+        notification.classList.remove('show');
+        setTimeout(() => notification.remove(), 300);
+    });
 }
 
 // Show loading spinner

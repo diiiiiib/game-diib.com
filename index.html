@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="description" content="Game DIIB - منصة تطوير الألعاب والمسابقات">
     <meta name="theme-color" content="#682fcc">
+    <link rel="manifest" href="/manifest.json">
     <title>Game DIIB - منصة تطوير الألعاب</title>
     <link rel="stylesheet" href="mobile-styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -432,6 +433,9 @@
     </style>
 </head>
 <body>
+    <!-- Skip to main content for accessibility -->
+    <a href="#main-content" class="skip-link">تخطي إلى المحتوى الرئيسي</a>
+
     <!-- Top Header -->
     <header class="top-header">
         <div class="logo">
@@ -446,7 +450,7 @@
     </header>
 
     <!-- Main Content -->
-    <main class="main-content">
+    <main class="main-content" id="main-content">
         <!-- Welcome Section -->
         <section class="welcome-section">
             <h1 class="welcome-title">مرحباً بك في Game DIIB! 👋</h1>
@@ -523,25 +527,15 @@
     <!-- Import API -->
     <script type="module" src="b-api.js"></script>
 
-    <!-- Import Common Functions -->
-    <script type="module" src="b-common.js"></script>
-
-    <!-- Import Firebase Auth -->
     <script type="module">
-        import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js';
-        window.getAuth = getAuth;
-        window.onAuthStateChanged = onAuthStateChanged;
-    </script>
+        // Import Firebase services
+        import { auth, onAuthStateChanged } from './b-firebase-config.js';
 
-    <!-- Import and Export Global Functions -->
-    <script type="module">
-        // Import all functions from b-api.js
+        // Import all functions from b-api.js and b-common.js first
         import * as api from './b-api.js';
-        
-        // Import all functions from b-common.js
         import * as common from './b-common.js';
-        
-        // Make API functions globally available
+
+        // Make API functions globally available immediately
         window.getUserById = api.getUserById;
         window.getUserByEmail = api.getUserByEmail;
         window.updateUser = api.updateUser;
@@ -570,7 +564,7 @@
         window.uploadFile = api.uploadFile;
         window.deleteFile = api.deleteFile;
         window.getRecentUpdates = api.getRecentUpdates;
-        
+
         // Make common functions globally available
         window.showError = common.showError;
         window.showSuccess = common.showSuccess;
@@ -598,290 +592,298 @@
         window.formatNumber = common.formatNumber;
         window.formatCurrency = common.formatCurrency;
         window.loadUserData = common.loadUserData;
-    </script>
 
-    <script>
         // Wait for DOM to be loaded
         document.addEventListener('DOMContentLoaded', async function() {
             // Check authentication state
-            const authInstance = window.getAuth ? window.getAuth() : null;
-            if (authInstance) {
-                window.onAuthStateChanged(authInstance, async (user) => {
-                    if (user) {
-                        // User is signed in, update UI with user data
-                        await loadUserData(user.uid);
-                        await loadHomePageData(user);
-                    } else {
-                        // User is signed out, redirect to login
-                        window.location.href = 'b-login.html';
-                    }
-                });
-            } else {
-                console.error('Auth instance not available');
-                window.location.href = 'b-login.html';
-            }
-
-            // Navigation functions
-            function navigateToDashboard() {
-                window.location.href = 'b-account.html';
-            }
-
-            function navigateToSearch() {
-                window.location.href = 'b-search.html';
-            }
-
-            function navigateToNotifications() {
-                window.location.href = 'b-notifications.html';
-            }
-
-            function navigateToProfile() {
-                window.location.href = 'b-profile.html';
-            }
-
-            function navigateTo(page) {
-                window.location.href = page;
-            }
-
-            function navigateToStore() {
-                window.location.href = 'b-store.html';
-            }
-
-            function navigateToCommunity() {
-                window.location.href = 'b-community.html';
-            }
-
-            function navigateToCompetitions() {
-                window.location.href = 'b-competitions.html';
-            }
-
-            // Load user data
-            async function loadUserData(userId) {
-                try {
-                    const userData = await window.getUserById(userId);
-                    if (userData) {
-                        // Update balance
-                        const balanceElement = document.querySelector('.balance-amount');
-                        if (balanceElement) {
-                            balanceElement.textContent = window.formatCurrency(userData.diibBalance || 0);
-                        }
-
-                        // Update avatar
-                        const avatarElement = document.querySelector('.account-avatar');
-                        if (avatarElement) {
-                            avatarElement.src = userData.avatar || 'https://placehold.co/36x36';
-                        }
-                    }
-                } catch (error) {
-                    console.error('Error loading user data:', error);
-                    window.showError('حدث خطأ في تحميل بيانات المستخدم');
+            onAuthStateChanged(auth, async (user) => {
+                if (user) {
+                    // User is signed in, update UI with user data
+                    await loadUserData(user.uid);
+                    await loadHomePageData(user);
+                } else {
+                    // User is signed out, redirect to login
+                    window.location.href = 'b-login.html';
                 }
-            }
+            });
+        });
 
-            // Export navigation functions to global scope
-            window.navigateToDashboard = navigateToDashboard;
-            window.navigateToSearch = navigateToSearch;
-            window.navigateToNotifications = navigateToNotifications;
-            window.navigateToProfile = navigateToProfile;
-            window.navigateTo = navigateTo;
-            window.navigateToStore = navigateToStore;
-            window.navigateToCommunity = navigateToCommunity;
-            window.navigateToCompetitions = navigateToCompetitions;
-            window.loadUserData = loadUserData;
+        // Navigation functions
+        function navigateToDashboard() {
+            window.location.href = 'b-account.html';
+        }
 
-            // Load home page data
-            async function loadHomePageData(user) {
-                try {
-                    // Load featured competition
-                    await loadFeaturedCompetition();
+        function navigateToSearch() {
+            window.location.href = 'b-search.html';
+        }
 
-                    // Load popular games
-                    await loadPopularGames();
+        function navigateToNotifications() {
+            window.location.href = 'b-notifications.html';
+        }
 
-                    // Load new assets
-                    await loadNewAssets();
+        function navigateToProfile() {
+            window.location.href = 'b-profile.html';
+        }
 
-                    // Load recent updates
-                    await loadRecentUpdates();
-                } catch (error) {
-                    console.error('Error loading home page data:', error);
-                    window.showError('حدث خطأ في تحميل البيانات');
+        function navigateTo(page) {
+            window.location.href = page;
+        }
+
+        function navigateToStore() {
+            window.location.href = 'b-store.html';
+        }
+
+        function navigateToCommunity() {
+            window.location.href = 'b-community.html';
+        }
+
+        function navigateToCompetitions() {
+            window.location.href = 'b-competitions.html';
+        }
+
+        // Load user data
+        async function loadUserData(userId) {
+            try {
+                const userData = await window.getUserById(userId);
+                if (userData) {
+                    // Update balance
+                    const balanceElement = document.querySelector('.balance-amount');
+                    if (balanceElement) {
+                        balanceElement.textContent = window.formatCurrency(userData.diibBalance || 0);
+                    }
+
+                    // Update avatar
+                    const avatarElement = document.querySelector('.account-avatar');
+                    if (avatarElement) {
+                        avatarElement.src = userData.avatar || 'https://placehold.co/36x36';
+                    }
                 }
+            } catch (error) {
+                console.error('Error loading user data:', error);
+                window.showError('حدث خطأ في تحميل بيانات المستخدم');
             }
+        }
 
-            // Load featured competition
-            async function loadFeaturedCompetition() {
-                try {
-                    const competitions = await window.getCompetitions();
-                    const competitionContainer = document.getElementById('featured-competition');
+        // Export navigation functions to global scope
+        window.navigateToDashboard = navigateToDashboard;
+        window.navigateToSearch = navigateToSearch;
+        window.navigateToNotifications = navigateToNotifications;
+        window.navigateToProfile = navigateToProfile;
+        window.navigateTo = navigateTo;
+        window.navigateToStore = navigateToStore;
+        window.navigateToCommunity = navigateToCommunity;
+        window.navigateToCompetitions = navigateToCompetitions;
+        window.loadUserData = loadUserData;
 
-                    if (competitions && competitions.length > 0) {
-                        const competition = competitions[0];
-                        const daysLeft = window.calculateDaysLeft(competition.endDate);
+        // Load home page data
+async function loadHomePageData(user) {
+    try {
+        // Load featured competition
+        await loadFeaturedCompetition();
 
-                        competitionContainer.innerHTML = `
-                            <div class="competition-banner">🏆</div>
-                            <div class="competition-info">
-                                <h3 class="competition-title">${competition.title}</h3>
-                                <p class="competition-description">${competition.description}</p>
-                                <div class="competition-meta">
-                                    <div class="competition-meta-item">
-                                        <span>📅</span>
-                                        <span>${daysLeft} يوم متبقي</span>
-                                    </div>
-                                    <div class="competition-meta-item">
-                                        <span>👥</span>
-                                        <span>${competition.participants ? competition.participants.length : 0} مشارك</span>
-                                    </div>
-                                    <div class="competition-meta-item">
-                                        <span>💰</span>
-                                        <span>${competition.prize || 'جائزة رائعة'}</span>
-                                    </div>
+        // Load popular games
+        await loadPopularGames();
+
+        // Load new assets
+        await loadNewAssets();
+
+        // Load recent updates
+        await loadRecentUpdates();
+    } catch (error) {
+        console.error('Error loading home page data:', error);
+        window.showError('حدث خطأ في تحميل البيانات');
+    }
+}
+
+        
+
+
+        // Load featured competition
+        async function loadFeaturedCompetition() {
+            try {
+                const competitions = await window.getCompetitions();
+                const competitionContainer = document.getElementById('featured-competition');
+
+                if (competitions && competitions.length > 0) {
+                    const competition = competitions[0];
+                    const daysLeft = window.calculateDaysLeft(competition.endDate);
+
+                    competitionContainer.innerHTML = `
+                        <div class="competition-banner">🏆</div>
+                        <div class="competition-info">
+                            <h3 class="competition-title">${competition.title}</h3>
+                            <p class="competition-description">${competition.description}</p>
+                            <div class="competition-meta">
+                                <div class="competition-meta-item">
+                                    <span>📅</span>
+                                    <span>${daysLeft} يوم متبقي</span>
                                 </div>
-                                <button class="competition-btn" onclick="window.navigateTo('b-competition-details.html?id=${competition.id}')">
-                                    انضم للمسابقة
-                                </button>
+                                <div class="competition-meta-item">
+                                    <span>👥</span>
+                                    <span>${competition.participants ? competition.participants.length : 0} مشارك</span>
+                                </div>
+                                <div class="competition-meta-item">
+                                    <span>💰</span>
+                                    <span>${competition.prize || 'جائزة رائعة'}</span>
+                                </div>
                             </div>
-                        `;
-                    } else {
-                        competitionContainer.innerHTML = `
-                            <div class="empty-state">
-                                <div class="empty-icon">🏆</div>
-                                <p>لا توجد مسابقات حالياً</p>
-                            </div>
-                        `;
-                    }
-                } catch (error) {
-                    console.error('Error loading featured competition:', error);
-                    const competitionContainer = document.getElementById('featured-competition');
+                            <button class="competition-btn" onclick="window.navigateTo('b-competition-details.html?id=${competition.id}')">
+                                انضم للمسابقة
+                            </button>
+                        </div>
+                    `;
+                } else {
                     competitionContainer.innerHTML = `
                         <div class="empty-state">
-                            <p>حدث خطأ في تحميل المسابقة</p>
+                            <div class="empty-icon">🏆</div>
+                            <p>لا توجد مسابقات حالياً</p>
                         </div>
                     `;
                 }
+            } catch (error) {
+                console.error('Error loading featured competition:', error);
+                const competitionContainer = document.getElementById('featured-competition');
+                competitionContainer.innerHTML = `
+                    <div class="empty-state">
+                        <p>حدث خطأ في تحميل المسابقة</p>
+                    </div>
+                `;
             }
+        }
 
-            // Load popular games
-            async function loadPopularGames() {
-                try {
-                    const games = await window.getPopularGames();
-                    const gamesContainer = document.getElementById('popular-games');
+        // Load popular games
+        async function loadPopularGames() {
+            try {
+                const games = await window.getPopularGames();
+                const gamesContainer = document.getElementById('popular-games');
 
-                    if (games && games.length > 0) {
-                        gamesContainer.innerHTML = games.map(game => `
-                            <div class="game-card" onclick="window.navigateTo('b-game-details.html?id=${game.id}')">
-                                <img src="${game.thumbnail || 'https://placehold.co/300x200'}" alt="${game.title}" class="game-image">
-                                <div class="game-info">
-                                    <h4 class="game-title">${game.title}</h4>
-                                    <div class="game-stats">
-                                        <div class="game-stat">
-                                            <span>⬇️</span>
-                                            <span>${window.formatNumber(game.downloads || 0)}</span>
-                                        </div>
-                                        <div class="game-stat">
-                                            <span>⭐</span>
-                                            <span>${game.averageRating ? game.averageRating.toFixed(1) : '0.0'}</span>
-                                        </div>
+                if (games && games.length > 0) {
+                    gamesContainer.innerHTML = games.map(game => `
+                        <div class="game-card" onclick="window.navigateTo('b-game-details.html?id=${game.id}')">
+                            <img src="${game.thumbnail || 'https://placehold.co/300x200'}" alt="${game.title}" class="game-image">
+                            <div class="game-info">
+                                <h4 class="game-title">${game.title}</h4>
+                                <div class="game-stats">
+                                    <div class="game-stat">
+                                        <span>⬇️</span>
+                                        <span>${window.formatNumber(game.downloads || 0)}</span>
+                                    </div>
+                                    <div class="game-stat">
+                                        <span>⭐</span>
+                                        <span>${game.averageRating ? game.averageRating.toFixed(1) : '0.0'}</span>
                                     </div>
                                 </div>
                             </div>
-                        `).join('');
-                    } else {
-                        gamesContainer.innerHTML = `
-                            <div class="empty-state">
-                                <div class="empty-icon">🎮</div>
-                                <p>لا توجد ألعاب حالياً</p>
-                            </div>
-                        `;
-                    }
-                } catch (error) {
-                    console.error('Error loading popular games:', error);
-                    const gamesContainer = document.getElementById('popular-games');
+                        </div>
+                    `).join('');
+                } else {
                     gamesContainer.innerHTML = `
                         <div class="empty-state">
-                            <p>حدث خطأ في تحميل الألعاب</p>
+                            <div class="empty-icon">🎮</div>
+                            <p>لا توجد ألعاب حالياً</p>
                         </div>
                     `;
                 }
+            } catch (error) {
+                console.error('Error loading popular games:', error);
+                const gamesContainer = document.getElementById('popular-games');
+                gamesContainer.innerHTML = `
+                    <div class="empty-state">
+                        <p>حدث خطأ في تحميل الألعاب</p>
+                    </div>
+                `;
             }
+        }
 
-            // Load new assets
-            async function loadNewAssets() {
-                try {
-                    const assets = await window.getAssets();
-                    const assetsContainer = document.getElementById('new-assets');
+        // Load new assets
+        async function loadNewAssets() {
+            try {
+                const assets = await window.getNewAssets();
+                const assetsContainer = document.getElementById('new-assets');
 
-                    if (assets && assets.length > 0) {
-                        assetsContainer.innerHTML = assets.slice(0, 6).map(asset => `
-                            <div class="asset-card" onclick="window.navigateTo('b-asset-details.html?id=${asset.id}')">
-                                <img src="${asset.thumbnail || 'https://placehold.co/300x200'}" alt="${asset.title}" class="asset-image">
-                                <div class="asset-info">
-                                    <h4 class="asset-title">${asset.title}</h4>
-                                    <p class="asset-price">${window.formatCurrency(asset.price || 0)}</p>
-                                </div>
+                if (assets && assets.length > 0) {
+                    assetsContainer.innerHTML = assets.map(asset => `
+                        <div class="asset-card" onclick="window.navigateTo('b-asset-details.html?id=${asset.id}')">
+                            <img src="${asset.thumbnail || 'https://placehold.co/150x120'}" alt="${asset.title}" class="asset-image">
+                            <div class="asset-info">
+                                <h4 class="asset-title">${asset.title}</h4>
+                                <div class="asset-price">${window.formatCurrency(asset.price || 0)}</div>
                             </div>
-                        `).join('');
-                    } else {
-                        assetsContainer.innerHTML = `
-                            <div class="empty-state">
-                                <div class="empty-icon">🎨</div>
-                                <p>لا توجد أصول حالياً</p>
-                            </div>
-                        `;
-                    }
-                } catch (error) {
-                    console.error('Error loading new assets:', error);
-                    const assetsContainer = document.getElementById('new-assets');
+                        </div>
+                    `).join('');
+                } else {
                     assetsContainer.innerHTML = `
                         <div class="empty-state">
-                            <p>حدث خطأ في تحميل الأصول</p>
+                            <div class="empty-icon">🎨</div>
+                            <p>لا توجد أصول جديدة حالياً</p>
                         </div>
                     `;
                 }
+            } catch (error) {
+                console.error('Error loading new assets:', error);
+                const assetsContainer = document.getElementById('new-assets');
+                assetsContainer.innerHTML = `
+                    <div class="empty-state">
+                        <p>حدث خطأ في تحميل الأصول</p>
+                    </div>
+                `;
             }
+        }
 
-            // Load recent updates
-            async function loadRecentUpdates() {
-                try {
-                    const updates = await window.getRecentUpdates();
-                    const updatesContainer = document.getElementById('recent-updates');
+        // Load recent updates
+        async function loadRecentUpdates() {
+            try {
+                const updates = await window.getRecentUpdates();
+                const updatesContainer = document.getElementById('recent-updates');
 
-                    if (updates && updates.length > 0) {
-                        updatesContainer.innerHTML = updates.map(update => `
-                            <div class="update-item">
-                                <div class="update-icon">${update.type === 'game' ? '🎮' : '🎨'}</div>
-                                <div class="update-content">
-                                    <p class="update-text">${update.content}</p>
-                                    <p class="update-time">${window.getTimeAgo(update.timestamp)}</p>
-                                </div>
+                if (updates && updates.length > 0) {
+                    updatesContainer.innerHTML = updates.map(update => `
+                        <div class="update-item">
+                            <div class="update-icon">${update.icon || '📢'}</div>
+                            <div class="update-content">
+                                <p class="update-text">${update.content}</p>
+                                <p class="update-time">${window.getTimeAgo(update.timestamp)}</p>
                             </div>
-                        `).join('');
-                    } else {
-                        updatesContainer.innerHTML = `
-                            <div class="empty-state">
-                                <div class="empty-icon">📢</div>
-                                <p>لا توجد تحديثات حالياً</p>
-                            </div>
-                        `;
-                    }
-                } catch (error) {
-                    console.error('Error loading recent updates:', error);
-                    const updatesContainer = document.getElementById('recent-updates');
+                        </div>
+                    `).join('');
+                } else {
                     updatesContainer.innerHTML = `
                         <div class="empty-state">
-                            <p>حدث خطأ في تحميل التحديثات</p>
+                            <div class="empty-icon">📢</div>
+                            <p>لا توجد تحديثات حالياً</p>
                         </div>
                     `;
                 }
+            } catch (error) {
+                console.error('Error loading recent updates:', error);
+                const updatesContainer = document.getElementById('recent-updates');
+                updatesContainer.innerHTML = `
+                    <div class="empty-state">
+                        <p>حدث خطأ في تحميل التحديثات</p>
+                    </div>
+                `;
             }
+        }
 
-            // Export data loading functions to global scope
-            window.loadHomePageData = loadHomePageData;
-            window.loadFeaturedCompetition = loadFeaturedCompetition;
-            window.loadPopularGames = loadPopularGames;
-            window.loadNewAssets = loadNewAssets;
-            window.loadRecentUpdates = loadRecentUpdates;
-        });
+        // Export data loading functions to global scope
+        window.loadHomePageData = loadHomePageData;
+        window.loadFeaturedCompetition = loadFeaturedCompetition;
+        window.loadPopularGames = loadPopularGames;
+        window.loadNewAssets = loadNewAssets;
+        window.loadRecentUpdates = loadRecentUpdates;
+
+        // Service Worker Registration for Performance
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(registration => {
+                        console.log('SW registered: ', registration);
+                    })
+                    .catch(registrationError => {
+                        console.log('SW registration failed: ', registrationError);
+                    });
+            });
+        }
     </script>
 </body>
 </html>

@@ -2,8 +2,18 @@
 // GAME DIIB - API Functions
 // ==========================================
 
-// Import Firebase services
+// ==========================================
+// GAME DIIB - API Functions
+// ==========================================
+
+// Import Firebase config and services
 import {
+    db,
+    storage,
+    COLLECTIONS,
+    getDocRef,
+    getCollectionRef,
+    handleFirebaseError,
     doc,
     getDoc,
     getDocs,
@@ -20,18 +30,12 @@ import {
     arrayRemove,
     increment,
     serverTimestamp,
-    runTransaction
-} from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js';
-
-import {
+    runTransaction,
     ref,
     uploadBytes,
-    getDownloadURL,
+    getStorageDownloadURL,
     deleteObject
-} from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-storage.js';
-
-// Import Firebase config
-import { db, storage, COLLECTIONS, getDocRef, getCollectionRef, handleFirebaseError } from './b-firebase-config.js';
+} from './b-firebase-config.js';
 
 // ==========================================
 // USER FUNCTIONS
@@ -366,10 +370,10 @@ export async function getAssets() {
 }
 
 // Get new assets (latest)
-export async function getNewAssets(limit = 10) {
+export async function getNewAssets(limitCount = 10) {
     try {
         const assetsRef = collection(db, COLLECTIONS.MODELS_3D);
-        const q = query(assetsRef, orderBy('createdAt', 'desc'), limit(limit));
+        const q = query(assetsRef, orderBy('createdAt', 'desc'), limit(limitCount));
         const querySnapshot = await getDocs(q);
 
         return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));

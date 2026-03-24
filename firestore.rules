@@ -5,15 +5,24 @@ service cloud.firestore {
     // قواعد المستخدمين
     match /users/{userId} {
       allow read: if request.auth != null;
-      allow create: if request.auth != null && request.auth.uid == userId;
-      allow update, delete: if request.auth != null && request.auth.uid == userId;
+      allow create: if request.auth != null && 
+                     request.auth.uid == userId &&
+                     request.auth.token.emailVerified == true;
+      allow update, delete: if request.auth != null && 
+                             request.auth.uid == userId &&
+                             request.auth.token.emailVerified == true;
     }
     
     // قواعد الألعاب
     match /games/{gameId} {
       allow read: if request.auth != null;
-      allow create: if request.auth != null && request.resource.data.developerId == request.auth.uid;
-      allow update, delete: if request.auth != null && (request.resource.data.developerId == request.auth.uid || request.resource.data.role == 'admin');
+      allow create: if request.auth != null && 
+                     request.resource.data.developerId == request.auth.uid &&
+                     request.auth.token.emailVerified == true;
+      allow update, delete: if request.auth != null && 
+                             (request.resource.data.developerId == request.auth.uid || 
+                              request.resource.data.role == 'admin') &&
+                             request.auth.token.emailVerified == true;
     }
     
     // قواعد المسابقات
@@ -33,15 +42,23 @@ service cloud.firestore {
     // قواعد التقييمات
     match /ratings/{ratingId} {
       allow read: if request.auth != null;
-      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
-      allow update, delete: if request.auth != null && resource.data.userId == request.auth.uid;
+      allow create: if request.auth != null && 
+                     request.resource.data.userId == request.auth.uid &&
+                     request.auth.token.emailVerified == true;
+      allow update, delete: if request.auth != null && 
+                             resource.data.userId == request.auth.uid &&
+                             request.auth.token.emailVerified == true;
     }
     
     // قواعد التعليقات
     match /comments/{commentId} {
       allow read: if request.auth != null;
-      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
-      allow update, delete: if request.auth != null && resource.data.userId == request.auth.uid;
+      allow create: if request.auth != null && 
+                     request.resource.data.userId == request.auth.uid &&
+                     request.auth.token.emailVerified == true;
+      allow update, delete: if request.auth != null && 
+                             resource.data.userId == request.auth.uid &&
+                             request.auth.token.emailVerified == true;
     }
     
     // قواعد الإشعارات
@@ -53,22 +70,34 @@ service cloud.firestore {
     // قواعد الأصول ثلاثية الأبعاد
     match /models_3d/{modelId} {
       allow read: if request.auth != null;
-      allow create: if request.auth != null && request.resource.data.designerId == request.auth.uid;
-      allow update, delete: if request.auth != null && resource.data.designerId == request.auth.uid;
+      allow create: if request.auth != null && 
+                     request.resource.data.designerId == request.auth.uid &&
+                     request.auth.token.emailVerified == true;
+      allow update, delete: if request.auth != null && 
+                             resource.data.designerId == request.auth.uid &&
+                             request.auth.token.emailVerified == true;
     }
     
     // قواعد تعليقات الأصول
     match /model_comments/{commentId} {
       allow read: if request.auth != null;
-      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
-      allow update, delete: if request.auth != null && resource.data.userId == request.auth.uid;
+      allow create: if request.auth != null && 
+                     request.resource.data.userId == request.auth.uid &&
+                     request.auth.token.emailVerified == true;
+      allow update, delete: if request.auth != null && 
+                             resource.data.userId == request.auth.uid &&
+                             request.auth.token.emailVerified == true;
     }
     
     // قواعد تقييمات الأصول
     match /model_ratings/{ratingId} {
       allow read: if request.auth != null;
-      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
-      allow update, delete: if request.auth != null && resource.data.userId == request.auth.uid;
+      allow create: if request.auth != null && 
+                     request.resource.data.userId == request.auth.uid &&
+                     request.auth.token.emailVerified == true;
+      allow update, delete: if request.auth != null && 
+                             resource.data.userId == request.auth.uid &&
+                             request.auth.token.emailVerified == true;
     }
 
     // قواعد منشورات المجتمع

@@ -2,6 +2,10 @@
 // GAME DIIB - Authentication System
 // ==========================================
 
+// ==========================================
+// GAME DIIB - Authentication System
+// ==========================================
+
 // Import Firebase services
 import {
     createUserWithEmailAndPassword,
@@ -15,17 +19,21 @@ import {
     sendPasswordResetEmail
 } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js';
 
+// Import Firebase config and services
 import {
+    auth,
+    db,
+    COLLECTIONS,
+    getDocRef,
+    getCollectionRef,
+    handleFirebaseError,
     serverTimestamp,
     setDoc,
     getDoc,
     updateDoc,
     doc,
     collection
-} from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js';
-
-// Import Firebase config
-import { auth, db, COLLECTIONS, getDocRef, getCollectionRef, handleFirebaseError } from './b-firebase-config.js';
+} from './b-firebase-config.js';
 
 // ==========================================
 // Authentication Functions

@@ -439,6 +439,27 @@
 
         let currentUserId = null;
 
+        // Navigation Functions
+        window.navigateToSettings = function() {
+            window.location.href = 'b-settings.html';
+        };
+
+        window.navigateToNotifications = function() {
+            window.location.href = 'b-notifications.html';
+        };
+
+        window.navigateToEarnings = function() {
+            window.location.href = 'b-earnings.html';
+        };
+
+        window.navigateToPublish = function() {
+            window.location.href = 'b-publish.html';
+        };
+
+        window.navigateToAnalytics = function() {
+            window.location.href = 'b-analytics.html';
+        };
+
         // Load Account Data
         async function loadAccountData(userId) {
             try {
